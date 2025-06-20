@@ -16,3 +16,12 @@ parameters:
         - '#Variable \$wpdb might not be defined#'
         - '#Variable \$wp_query might not be defined#'
         - '#Variable \$post might not be defined#'
+        
+        # Ignore WooCommerce functions and classes when WooCommerce is not loaded
+        - '#Function wc_get_product not found#'
+        - '#Function wc_get_coupon_id_by_code not found#'
+        - '#Function wc_get_logger not found#'
+        - '#Instantiated class WC_Coupon not found#'
+        - '#Call to method .* on an unknown class WC_Coupon#'
+        - '#Method .* of an unknown class WC_Coupon#'
+        - '#Parameter .* of method .* expects WC_Product#'

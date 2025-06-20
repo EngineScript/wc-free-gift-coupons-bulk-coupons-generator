@@ -1,4 +1,4 @@
-# Changelog for WooCommerce Free Gift Bulk Coupons Generator
+# Changelog for WC Free Gift Coupons Bulk Coupon Generator
 
 ## 1.0.0 - June 17, 2025
 ### Initial Release

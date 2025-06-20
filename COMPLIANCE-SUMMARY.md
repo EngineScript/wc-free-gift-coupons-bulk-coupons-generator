@@ -1,6 +1,6 @@
-# WooCommerce Free Gift Bulk Coupons Generator - Security & Compliance Summary
+# WC Free Gift Coupons Bulk Coupon Generator - Security & Compliance Summary
 
-This document outlines the security measures and compliance standards implemented in the WooCommerce Free Gift Bulk Coupons Generator WordPress plugin.
+This document outlines the security measures and compliance standards implemented in the WC Free Gift Coupons Bulk Coupon Generator WordPress plugin.
 
 ## Security Implementation
 

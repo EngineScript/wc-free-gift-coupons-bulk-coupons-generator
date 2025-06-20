@@ -1,10 +1,10 @@
-# WooCommerce Free Gift Bulk Coupons Generator
+# WC Free Gift Coupons Bulk Coupon Generator
 # Copyright (C) 2025 EngineScript
 # This file is distributed under the GPL v3 or later.
 
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce Free Gift Bulk Coupons Generator 1.0.0\n"
+"Project-Id-Version: WC Free Gift Coupons Bulk Coupon Generator 1.0.0\n"
 "POT-Creation-Date: 2025-06-20 12:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"

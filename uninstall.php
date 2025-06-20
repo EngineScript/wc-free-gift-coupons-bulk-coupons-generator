@@ -1,6 +1,6 @@
 <?php
 /**
- * Uninstall script for WooCommerce Free Gift Bulk Coupons Generator
+ * Uninstall script for WC Free Gift Coupons Bulk Coupon Generator
  * 
  * This script runs when the plugin is deleted via WordPress admin.
  * It cleans up any data created by the plugin.

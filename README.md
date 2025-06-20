@@ -1,12 +1,12 @@
-# WooCommerce Free Gift Bulk Coupons Generator
+# WC Free Gift Coupons Bulk Coupon Generator
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/d81efac1703c4d3b8b998d2587cd696b)](https://app.codacy.com/gh/EngineScript/WooCommerce-Free-Gift-Bulk-Coupons-Generator/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/d81efac1703c4d3b8b998d2587cd696b)](https://app.codacy.com/gh/EngineScript/WC-Free-Gift-Coupons-Bulk-Coupons-Generator/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![License](https://img.shields.io/badge/License-GPL%20v3-green.svg?logo=gnu)](https://www.gnu.org/licenses/gpl-3.0.html)
 [![WordPress Compatible](https://img.shields.io/badge/WordPress-6.0%2B-blue.svg?logo=wordpress)](https://wordpress.org/)
 [![PHP Compatible](https://img.shields.io/badge/PHP-7.4%2B-purple.svg?logo=php)](https://www.php.net/)
 
 ## Current Version
-[![Version](https://img.shields.io/badge/Version-1.0.0-orange.svg?logo=github)](https://github.com/EngineScript/WooCommerce-Free-Gift-Bulk-Coupons-Generator/releases/latest/download/free-gift-bulk-coupon-generator-1.0.0.zip)
+[![Version](https://img.shields.io/badge/Version-1.0.0-orange.svg?logo=github)](https://github.com/EngineScript/WC-Free-Gift-Coupons-Bulk-Coupons-Generator/releases/latest/download/free-gift-bulk-coupon-generator-1.0.0.zip)
 
 A WordPress plugin for generating bulk free gift coupons that work specifically with the **Free Gift Coupons for WooCommerce** plugin. Creates coupons with the proper data structure required for free gift functionality.
 
@@ -120,7 +120,7 @@ add_action('scg_after_coupon_generation', function($product_id, $count) {
 
 ## Support
 
-For support, feature requests, or bug reports, please visit the [GitHub repository](https://github.com/EngineScript/WooCommerce-Free-Gift-Bulk-Coupons-Generator).
+For support, feature requests, or bug reports, please visit the [GitHub repository](https://github.com/EngineScript/WC-Free-Gift-Coupons-Bulk-Coupons-Generator).
 
 ---
 

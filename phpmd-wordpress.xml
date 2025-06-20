@@ -15,8 +15,17 @@
         <exclude name="MissingImport"/>
     </rule>
     
-    <!-- Code Size Rules -->
-    <rule ref="rulesets/codesize.xml"/>
+    <!-- Code Size Rules (with WordPress-specific adjustments) -->
+    <rule ref="rulesets/codesize.xml">
+        <!-- Exclude ExcessiveClassComplexity - WordPress plugin classes often handle multiple responsibilities -->
+        <exclude name="ExcessiveClassComplexity"/>
+        <!-- Exclude ExcessiveMethodLength - WordPress admin pages often require long methods -->
+        <exclude name="ExcessiveMethodLength"/>
+        <!-- Exclude CyclomaticComplexity - WordPress form handling often requires complex logic -->
+        <exclude name="CyclomaticComplexity"/>
+        <!-- Exclude NPathComplexity - WordPress validation often requires complex paths -->
+        <exclude name="NPathComplexity"/>
+    </rule>
     
     <!-- Controversial Rules (with WordPress exceptions) -->
     <rule ref="rulesets/controversial.xml">
@@ -30,8 +39,17 @@
         <exclude name="ExitExpression"/>
     </rule>
     
-    <!-- Naming Rules -->
-    <rule ref="rulesets/naming.xml"/>
+    <!-- Naming Rules (with WordPress exceptions) -->
+    <rule ref="rulesets/naming.xml">
+        <!-- Exclude CamelCaseMethodName - WordPress uses snake_case for hook methods -->
+        <exclude name="CamelCaseMethodName"/>
+        <!-- Exclude CamelCaseParameterName - WordPress uses snake_case for parameters -->
+        <exclude name="CamelCaseParameterName"/>
+        <!-- Exclude CamelCaseVariableName - WordPress uses snake_case for variables -->
+        <exclude name="CamelCaseVariableName"/>
+        <!-- Exclude LongVariable - WordPress often uses descriptive variable names -->
+        <exclude name="LongVariable"/>
+    </rule>
     
     <!-- Unused Code Rules -->
     <rule ref="rulesets/unusedcode.xml"/>

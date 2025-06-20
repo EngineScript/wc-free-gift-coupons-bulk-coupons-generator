@@ -1,17 +1,15 @@
 <?php
 /**
- * Plugin Name: WooCommerce Free Gift Bulk Coupons Generator
- * Plugin URI: https://github.com/EngineScript/WooCommerce-Free-Gift-Bulk-Coupons-Generator
+ * Plugin Name: WC Free Gift Coupons Bulk Coupon Generator
+ * Plugin URI: https://github.com/EngineScript/WC-Free-Gift-Coupons-Bulk-Coupons-Generator
  * Description: Generate bulk free gift coupon codes that work with the Free Gift Coupons for WooCommerce plugin. Creates coupons with the proper data structure for free gift functionality.
  * Version: 1.0.0
  * Author: EngineScript
  * Requires at least: 6.0
  * Tested up to: 6.4
  * Requires PHP: 7.4
- * WC requires at least: 5.0
- * WC tested up to: 8.0
- * License: GPL v2 or later
- * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * License: GPL v3 or later
+ * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * Text Domain: free-gift-bulk-coupon-generator
  * Domain Path: /languages
  */
@@ -80,8 +78,9 @@ class WooCommerceFreeGiftBulkCoupons {
      * WooCommerce missing notice
      */
     public function woocommerce_missing_notice() {
+        /* translators: %s: WooCommerce download link */
         $message = sprintf(
-            esc_html__('WooCommerce Free Gift Bulk Coupons Generator requires WooCommerce to be installed and active. You can download %s here.', 'free-gift-bulk-coupon-generator'),
+            esc_html__('WC Free Gift Coupons Bulk Coupon Generator requires WooCommerce to be installed and active. You can download %s here.', 'free-gift-bulk-coupon-generator'),
             '<a href="https://woocommerce.com/" target="_blank">WooCommerce</a>'
         );
         echo '<div class="error"><p>' . wp_kses_post($message) . '</p></div>';
@@ -138,6 +137,11 @@ class WooCommerceFreeGiftBulkCoupons {
      * Handle coupon generation
      */
     private function handle_coupon_generation() {
+        // Verify nonce for security
+        if (!isset($_POST['scg_nonce']) || !wp_verify_nonce(wp_unslash($_POST['scg_nonce']), 'scg_generate_coupons_action')) {
+            wp_die(__('Security check failed. Please try again.', 'free-gift-bulk-coupon-generator'));
+        }
+
         // Verify user capabilities
         if (!current_user_can('manage_woocommerce')) {
             wp_die(__('You do not have permission to generate coupons.', 'free-gift-bulk-coupon-generator'));
@@ -157,11 +161,11 @@ class WooCommerceFreeGiftBulkCoupons {
         // Set transient to prevent concurrent requests
         set_transient($transient_key, true, 300); // 5 minutes
         
-        // Sanitize and validate input
-        $product_ids = isset($_POST['product_id']) ? array_map('absint', (array) $_POST['product_id']) : array();
-        $number_of_coupons = isset($_POST['number_of_coupons']) ? absint($_POST['number_of_coupons']) : 0;
-        $coupon_prefix = isset($_POST['coupon_prefix']) ? sanitize_text_field($_POST['coupon_prefix']) : '';
-        $discount_type = isset($_POST['discount_type']) ? sanitize_text_field($_POST['discount_type']) : 'free_gift';
+        // Sanitize and validate input with proper unslashing
+        $product_ids = isset($_POST['product_id']) ? array_map('absint', (array) wp_unslash($_POST['product_id'])) : array();
+        $number_of_coupons = isset($_POST['number_of_coupons']) ? absint(wp_unslash($_POST['number_of_coupons'])) : 0;
+        $coupon_prefix = isset($_POST['coupon_prefix']) ? sanitize_text_field(wp_unslash($_POST['coupon_prefix'])) : '';
+        $discount_type = isset($_POST['discount_type']) ? sanitize_text_field(wp_unslash($_POST['discount_type'])) : 'free_gift';
         
         // Validate discount type against allowed values
         $allowed_discount_types = array('free_gift', 'percent', 'fixed_cart', 'fixed_product');
@@ -218,6 +222,7 @@ class WooCommerceFreeGiftBulkCoupons {
         if ($generated_coupons > 0) {
             add_action('admin_notices', function() use ($generated_coupons) {
                 echo '<div class="notice notice-success is-dismissible"><p>' . 
+                     /* translators: %d: Number of coupons generated */
                      sprintf(esc_html__('Successfully generated %d coupons.', 'free-gift-bulk-coupon-generator'), $generated_coupons) . 
                      '</p></div>';
             });
@@ -303,8 +308,9 @@ class WooCommerceFreeGiftBulkCoupons {
                 
                 // Set coupon properties
                 $coupon->set_code($random_code);
+                /* translators: 1: Product names, 2: Current batch number, 3: Total number of coupons */
                 $coupon->set_description(sprintf(
-                    __('Auto-generated coupon for %s (Batch %d/%d)', 'free-gift-bulk-coupon-generator'),
+                    __('Auto-generated coupon for %1$s (Batch %2$d/%3$d)', 'free-gift-bulk-coupon-generator'),
                     $products_text,
                     $i,
                     $number_of_coupons
@@ -340,7 +346,11 @@ class WooCommerceFreeGiftBulkCoupons {
                 
             } catch (Exception $e) {
                 // Log error but continue with next coupon - don't expose sensitive details
-                error_log('SCG Error generating coupon: ' . $e->getCode());
+                // Only log in debug mode
+                if (defined('WP_DEBUG') && WP_DEBUG) {
+                    /* translators: %s: Error code */
+                    wc_get_logger()->error(sprintf(__('SCG Error generating coupon: %s', 'free-gift-bulk-coupon-generator'), $e->getCode()), array('source' => 'free-gift-bulk-coupon-generator'));
+                }
                 $i--; // Try again with same counter
                 continue;
             }
@@ -429,13 +439,13 @@ class WooCommerceFreeGiftBulkCoupons {
         $products = $this->get_products_for_dropdown();
         ?>
         <div class="wrap">
-            <h1><?php esc_html_e('Free Gift Bulk Coupons Generator', 'free-gift-bulk-coupon-generator'); ?></h1>
+            <h1><?php esc_html_e('WC Free Gift Coupons Bulk Coupon Generator', 'free-gift-bulk-coupon-generator'); ?></h1>
             <p><?php esc_html_e('Generate bulk free gift coupons that work with the Free Gift Coupons for WooCommerce plugin. These coupons are created with the proper data structure required for free gift functionality.', 'free-gift-bulk-coupon-generator'); ?></p>
             
             <div class="scg-admin-container">
                 <div class="scg-main-content">
                     <form method="post" action="" class="scg-form">
-                        <?php wp_nonce_field('scg_generate_coupons', 'scg_nonce'); ?>
+                        <?php wp_nonce_field('scg_generate_coupons_action', 'scg_nonce'); ?>
                         
                         <table class="form-table">
                             <tr>
@@ -529,11 +539,11 @@ class WooCommerceFreeGiftBulkCoupons {
             
             <div class="scg-footer">
                 <p class="scg-repo-link">
-                    <a href="https://github.com/EngineScript/WooCommerce-Free-Gift-Bulk-Coupons-Generator" target="_blank" rel="noopener noreferrer">
+                    <a href="https://github.com/EngineScript/WC-Free-Gift-Coupons-Bulk-Coupons-Generator" target="_blank" rel="noopener noreferrer">
                         <?php esc_html_e('View on GitHub', 'free-gift-bulk-coupon-generator'); ?>
                     </a>
                     |
-                    <a href="https://github.com/EngineScript/WooCommerce-Free-Gift-Bulk-Coupons-Generator/issues" target="_blank" rel="noopener noreferrer">
+                    <a href="https://github.com/EngineScript/WC-Free-Gift-Coupons-Bulk-Coupons-Generator/issues" target="_blank" rel="noopener noreferrer">
                         <?php esc_html_e('Report Issues', 'free-gift-bulk-coupon-generator'); ?>
                     </a>
                 </p>
@@ -545,3 +555,10 @@ class WooCommerceFreeGiftBulkCoupons {
 
 // Initialize plugin
 WooCommerceFreeGiftBulkCoupons::get_instance();
+
+/**
+ * Helper function for testing - indicates plugin is loaded
+ */
+function fgbcg_admin_menu() {
+    return true;
+}

@@ -1,6 +1,6 @@
 {
-  "name": "enginescript/woocommerce-free-gift-bulk-coupons-generator",
-  "description": "WooCommerce Free Gift Bulk Coupons Generator - Generate bulk free gift coupons for Free Gift Coupons for WooCommerce plugin",
+  "name": "enginescript/wc-free-gift-coupons-bulk-coupon-generator",
+  "description": "WC Free Gift Coupons Bulk Coupon Generator - Generate bulk free gift coupons for Free Gift Coupons for WooCommerce plugin",
   "type": "wordpress-plugin",
   "license": "GPL-3.0-or-later",
   "authors": [
