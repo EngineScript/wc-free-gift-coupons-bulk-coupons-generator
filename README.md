@@ -122,10 +122,6 @@ add_action('scg_after_coupon_generation', function($product_id, $count) {
 
 For support, feature requests, or bug reports, please visit the [GitHub repository](https://github.com/EngineScript/WooCommerce-Free-Gift-Bulk-Coupons-Generator).
 
-## License
-
-This plugin is licensed under the GPL v2 or later.
-
 ---
 
 **Note**: This plugin is designed specifically for WooCommerce and requires WooCommerce to be installed and activated to function properly.
