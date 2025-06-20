@@ -1,0 +1,49 @@
+# This workflow automatically posts a guidance comment on new issues.
+# It instructs users to provide relevant information about their WordPress setup and plugin configuration,
+# helping maintainers get the information needed to troubleshoot and resolve issues efficiently.
+
+name: Issue Guidance
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  guide:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post guidance comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Thanks for opening an issue! 🎯 
+            
+            To help us resolve your issue quickly, please provide the following information:
+            
+            **Environment Details:**
+            - WordPress version: 
+            - WooCommerce version: 
+            - PHP version: 
+            - Plugin version: 
+            
+            **Issue Description:**
+            - What were you trying to do?
+            - What happened instead?
+            - Are there any error messages? (please include them)
+            
+            **Steps to Reproduce:**
+            1. Go to...
+            2. Click on...
+            3. See error...
+            
+            **Additional Context:**
+            - Any relevant screenshots
+            - Browser console errors (if applicable)
+            - Server error logs (if available)
+            
+            The more information you provide, the faster we can help! 🚀

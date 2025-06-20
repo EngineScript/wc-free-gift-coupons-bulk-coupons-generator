@@ -1,0 +1,30 @@
+{
+  "name": "enginescript/woocommerce-free-gift-bulk-coupons-generator",
+  "description": "WooCommerce Free Gift Bulk Coupons Generator - Generate bulk free gift coupons for Free Gift Coupons for WooCommerce plugin",
+  "type": "wordpress-plugin",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "EngineScript",
+      "email": "support@enginescript.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=7.4"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5",
+    "yoast/phpunit-polyfills": "^4.0",
+    "wp-coding-standards/wpcs": "^2.3",
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0.0",
+    "php-stubs/wordpress-stubs": "^6.8",
+    "szepeviktor/phpstan-wordpress": "^1.3",
+    "phpstan/phpstan": "^1.0"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  }
+}
