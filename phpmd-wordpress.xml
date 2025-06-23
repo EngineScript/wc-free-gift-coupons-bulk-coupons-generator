@@ -41,14 +41,16 @@
     
     <!-- Naming Rules (with WordPress exceptions) -->
     <rule ref="rulesets/naming.xml">
-        <!-- Exclude CamelCaseMethodName - WordPress uses snake_case for hook methods -->
+        <!-- Exclude ALL CamelCase rules - WordPress uses snake_case convention -->
+        <exclude name="CamelCaseClassName"/>
         <exclude name="CamelCaseMethodName"/>
-        <!-- Exclude CamelCaseParameterName - WordPress uses snake_case for parameters -->
         <exclude name="CamelCaseParameterName"/>
-        <!-- Exclude CamelCaseVariableName - WordPress uses snake_case for variables -->
+        <exclude name="CamelCasePropertyName"/>
         <exclude name="CamelCaseVariableName"/>
         <!-- Exclude LongVariable - WordPress often uses descriptive variable names -->
         <exclude name="LongVariable"/>
+        <!-- Exclude ShortVariable - WordPress allows short vars like $i, $e -->
+        <exclude name="ShortVariable"/>
     </rule>
     
     <!-- Unused Code Rules -->
