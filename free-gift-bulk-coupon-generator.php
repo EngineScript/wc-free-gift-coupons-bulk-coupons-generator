@@ -78,8 +78,8 @@ class WooCommerceFreeGiftBulkCoupons {
      * WooCommerce missing notice
      */
     public function woocommerce_missing_notice() {
-        /* translators: %s: WooCommerce download link */
         $message = sprintf(
+            /* translators: %s: WooCommerce download link */
             esc_html__('WC Free Gift Coupons Bulk Coupon Generator requires WooCommerce to be installed and active. You can download %s here.', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'),
             '<a href="https://woocommerce.com/" target="_blank">WooCommerce</a>'
         );
@@ -222,8 +222,11 @@ class WooCommerceFreeGiftBulkCoupons {
         if ($generated_coupons > 0) {
             add_action('admin_notices', function() use ($generated_coupons) {
                 echo '<div class="notice notice-success is-dismissible"><p>' . 
-                     /* translators: %d: Number of coupons generated */
-                     sprintf(esc_html__('Successfully generated %d coupons.', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'), esc_html($generated_coupons)) . 
+                     sprintf(
+                         /* translators: %d: Number of coupons generated */
+                         esc_html__('Successfully generated %d coupons.', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'), 
+                         esc_html($generated_coupons)
+                     ) . 
                      '</p></div>';
             });
         } else {
@@ -308,8 +311,8 @@ class WooCommerceFreeGiftBulkCoupons {
                 
                 // Set coupon properties
                 $coupon->set_code($random_code);
-                /* translators: 1: Product names, 2: Current batch number, 3: Total number of coupons */
                 $coupon->set_description(sprintf(
+                    /* translators: 1: Product names, 2: Current batch number, 3: Total number of coupons */
                     __('Auto-generated coupon for %1$s (Batch %2$d/%3$d)', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'),
                     $products_text,
                     $i,
@@ -348,8 +351,14 @@ class WooCommerceFreeGiftBulkCoupons {
                 // Log error but continue with next coupon - don't expose sensitive details
                 // Only log in debug mode
                 if (defined('WP_DEBUG') && WP_DEBUG) {
-                    /* translators: %s: Error code */
-                    wc_get_logger()->error(sprintf(__('SCG Error generating coupon: %s', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'), $e->getCode()), array('source' => 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'));
+                    wc_get_logger()->error(
+                        sprintf(
+                            /* translators: %s: Error code */
+                            __('SCG Error generating coupon: %s', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'), 
+                            $e->getCode()
+                        ), 
+                        array('source' => 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator')
+                    );
                 }
                 $i--; // Try again with same counter
                 continue;
