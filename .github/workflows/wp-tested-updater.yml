@@ -27,6 +27,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: WordPress version checker
-        uses: skaut/wordpress-version-checker@v2.2.3
+        uses: skaut/wordpress-version-checker@v2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
