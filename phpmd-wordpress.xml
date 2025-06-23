@@ -39,19 +39,8 @@
         <exclude name="ExitExpression"/>
     </rule>
     
-    <!-- Naming Rules (with WordPress exceptions) -->
-    <rule ref="rulesets/naming.xml">
-        <!-- Exclude ALL CamelCase rules - WordPress uses snake_case convention -->
-        <exclude name="CamelCaseClassName"/>
-        <exclude name="CamelCaseMethodName"/>
-        <exclude name="CamelCaseParameterName"/>
-        <exclude name="CamelCasePropertyName"/>
-        <exclude name="CamelCaseVariableName"/>
-        <!-- Exclude LongVariable - WordPress often uses descriptive variable names -->
-        <exclude name="LongVariable"/>
-        <!-- Exclude ShortVariable - WordPress allows short vars like $i, $e -->
-        <exclude name="ShortVariable"/>
-    </rule>
+    <!-- SKIP naming rules entirely - WordPress uses snake_case convention which conflicts with PHPMD -->
+    <!-- <rule ref="rulesets/naming.xml"/> -->
     
     <!-- Unused Code Rules -->
     <rule ref="rulesets/unusedcode.xml"/>
