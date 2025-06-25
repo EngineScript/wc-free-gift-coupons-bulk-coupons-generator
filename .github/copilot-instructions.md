@@ -9,6 +9,16 @@ This project is coded entirely in a remote development environment using GitHub 
 
 Change summaries should be concise and clear, focusing on the specific changes made. The AI should not ask for confirmation before making changes, as all code modifications will be done directly in the remote environment. 
 
+# Responses
+
+When delivering responses, the AI should provide clear, concise, and actionable information. Responses should be formatted in a way that is easy to read and understand, with a focus on clarity and precision. The AI should avoid unnecessary verbosity or complexity in its explanations.
+
+Responses, change summaries, and code comments should be written in English. The AI should not use any other languages or dialects, including regional variations of English. All communication should be clear and professional, adhering to standard English grammar and spelling conventions. 
+
+Responses should be delivered only in the chat interface. Formatting and styling should be utilized to enhance readability.
+
+Change summaries should never be created in the form of new .md files.
+
 # Code Analysis and Reading Standards
 
 You must read files completely and thoroughly, with a minimum of 1000 lines per read operation when analyzing code. Never truncate files or stop reading at arbitrary limits like 50 or 100 lines - this lazy approach provides incomplete context and leads to poor suggestions. When you encounter any file, read it from the very first line to the absolute last line, processing all functions, classes, variables, imports, exports, and code structures. Your analysis must be based on the complete file content, not partial snapshots. Always read at least 1000 lines minimum per read operation, and if the file is larger, continue reading until you've processed the entire file. Do not use phrases like "showing first X lines" or "truncated for brevity" or "rest of file omitted" - these indicate lazy, incomplete analysis. Instead, demonstrate that you've read the complete file by referencing specific sections throughout the entire codebase, understanding the full context of how functions interact, how variables are used across the entire file, and how the complete code structure works together. Your suggestions and recommendations must reflect knowledge of the entire file, not just the beginning portions. Take the time to read everything properly because thoroughness and accuracy based on complete file knowledge is infinitely more valuable than quick, incomplete reviews that miss critical context and lead to incorrect suggestions.
@@ -90,3 +100,5 @@ You must read files completely and thoroughly, with a minimum of 1000 lines per 
 - Only ask for manual intervention if domain-specific knowledge is required
 - Auto-generate missing files, boilerplate, and tests when possible
 - Auto-lint and format code using standard tools (e.g., Prettier, ESLint, dotnet format)
+- Changes should be made directly to the file in question. Example: admin.php should be modified directly, not by creating a new file like admin-changes.php.
+- New files may be created when appropriate, but they should be relevant to the task at hand, so long as they are not a rewrite of an existing file. We want to avoid unnecessary duplication of files.
