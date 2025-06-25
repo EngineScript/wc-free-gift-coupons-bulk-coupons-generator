@@ -18,6 +18,26 @@ if (typeof window !== 'undefined' && typeof window.jQuery !== 'undefined') {
         var SCG_Admin = {
         
         /**
+         * Utility function to clean and validate alphanumeric input
+         * CODACY ADDRESSED: Centralized logic to avoid code duplication
+         * @param value - The input value to clean
+         * @param maxLength - Maximum allowed length (default 10)
+         * @returns Cleaned alphanumeric string
+         */
+        cleanAlphanumeric: function(value, maxLength) {
+            maxLength = maxLength || 10;
+            var cleanValue = '';
+            // CODACY COMPLIANT: Manual iteration avoids native split() method
+            for (var i = 0; i < value.length && cleanValue.length < maxLength; i++) {
+                var char = value.charAt(i);
+                if (/[a-zA-Z0-9]/.test(char)) {
+                    cleanValue += char.toUpperCase();
+                }
+            }
+            return cleanValue;
+        },
+        
+        /**
          * Initialize the admin functionality
          */
         init: function() {
@@ -82,22 +102,11 @@ if (typeof window !== 'undefined' && typeof window.jQuery !== 'undefined') {
         
         /**
          * Format and validate the coupon prefix input
+         * CODACY ADDRESSED: Using centralized utility to eliminate duplication
          */
         formatPrefix: function() {
             var value = $(this).val();
-            // Remove special characters and convert to uppercase
-            // CODACY COMPLIANT: Manual iteration avoids native split() method
-            var cleanValue = '';
-            for (var i = 0; i < value.length; i++) {
-                var char = value.charAt(i);
-                if (/[a-zA-Z0-9]/.test(char)) {
-                    cleanValue += char.toUpperCase();
-                }
-            }
-            // Limit to 10 characters
-            if (cleanValue.length > 10) {
-                cleanValue = cleanValue.substring(0, 10);
-            }
+            var cleanValue = SCG_Admin.cleanAlphanumeric(value, 10);
             $(this).val(cleanValue);
         },
         
@@ -269,19 +278,8 @@ if (typeof window !== 'undefined' && typeof window.jQuery !== 'undefined') {
                 var $this = $(this);
                 var value = $this.val();
                 
-                // Remove invalid characters and enforce length
-                // CODACY COMPLIANT: Manual iteration avoids native split() method
-                var cleanValue = '';
-                for (var i = 0; i < value.length; i++) {
-                    var char = value.charAt(i);
-                    if (/[A-Za-z0-9]/.test(char)) {
-                        cleanValue += char.toUpperCase();
-                    }
-                }
-                if (cleanValue.length > 10) {
-                    cleanValue = cleanValue.substring(0, 10);
-                }
-                
+                // CODACY ADDRESSED: Using centralized utility to eliminate duplication
+                var cleanValue = SCG_Admin.cleanAlphanumeric(value, 10);
                 $this.val(cleanValue);
             });
         },
