@@ -1,17 +1,27 @@
 /**
  * WooCommerce Free Gift Bulk Coupons Generator Admin JavaScript
+ * ES5-compatible code for maximum browser compatibility
  */
 
 jQuery(document).ready(function($) {
     'use strict';
     
+    /**
+     * Main admin object for handling the coupon generator interface
+     */
     var SCG_Admin = {
         
+        /**
+         * Initialize the admin functionality
+         */
         init: function() {
             this.bindEvents();
             this.initFormValidation();
         },
         
+        /**
+         * Bind event handlers to form elements
+         */
         bindEvents: function() {
             // Form submission
             $('.scg-form').on('submit', this.handleFormSubmission);
@@ -26,12 +36,17 @@ jQuery(document).ready(function($) {
             $('#product_id').on('change', this.handleProductChange);
         },
         
+        /**
+         * Handle form submission with validation and loading states
+         * @param {Event} e - The form submission event
+         * @returns {boolean} - Whether to proceed with submission
+         */
         handleFormSubmission: function(e) {
             var $form = $(this);
             var $submitBtn = $form.find('.button-primary');
             
             // Validate form before submission
-            if (!SCG_Admin.validateForm()) {
+            if (!SCG_Admin.validateForm($form)) {
                 e.preventDefault();
                 return false;
             }
@@ -58,18 +73,12 @@ jQuery(document).ready(function($) {
             
             return true;
         },
-                
-                if (!confirmed) {
-                    $form.removeClass('loading');
-                    $submitBtn.prop('disabled', false);
-                    e.preventDefault();
-                    return false;
-                }
-            }
-        },
         
+        /**
+         * Format and validate the coupon prefix input
+         */
         formatPrefix: function() {
-            let value = $(this).val();
+            var value = $(this).val();
             // Remove special characters and convert to uppercase
             value = value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
             // Limit to 10 characters
@@ -79,19 +88,22 @@ jQuery(document).ready(function($) {
             $(this).val(value);
         },
         
-        validateCouponCount: function() {
-            const $input = $(this);
-            let value = $input.val();
-            const $warning = $('#coupon-count-warning');
+        /**
+         * Validate and sanitize number input for coupon count
+         */
+        validateNumberInput: function() {
+            var $input = $(this);
+            var value = $input.val();
+            var $warning = $('#coupon-count-warning');
             
             // Remove existing warning
             $warning.remove();
             
-            // Sanitize input - remove non-numeric characters except the first character for negative sign
+            // Sanitize input - remove non-numeric characters
             value = value.replace(/[^\d]/g, '');
             
             // Parse as integer
-            const numValue = parseInt(value, 10);
+            var numValue = parseInt(value, 10);
             
             // Validate range
             if (isNaN(numValue) || numValue < 1) {
@@ -101,21 +113,24 @@ jQuery(document).ready(function($) {
             
             if (numValue > 100) {
                 $input.val('100');
-                // Codacy false positive: Static HTML template with no user input
+                // Static HTML template with no user input
                 $input.after('<span id="coupon-count-warning" style="color: #d63638; font-size: 12px; display: block; margin-top: 5px;">Maximum 100 coupons allowed</span>');
             } else if (numValue > 50) {
                 $input.val(numValue);
-                // Codacy false positive: Static HTML template with no user input
+                // Static HTML template with no user input
                 $input.after('<span id="coupon-count-warning" style="color: #dba617; font-size: 12px; display: block; margin-top: 5px;">Generating many coupons may take some time and could timeout</span>');
             } else {
                 $input.val(numValue);
             }
         },
         
+        /**
+         * Handle product selection changes and update UI accordingly
+         */
         handleProductChange: function() {
-            const $select = $(this);
-            const $submitBtn = $('.button-primary');
-            const selectedValues = $select.val();
+            var $select = $(this);
+            var $submitBtn = $('.button-primary');
+            var selectedValues = $select.val();
             
             if (selectedValues && selectedValues.length > 0) {
                 $submitBtn.removeClass('disabled');
@@ -124,8 +139,8 @@ jQuery(document).ready(function($) {
             }
             
             // Update info text based on selection
-            const $description = $select.next('.description');
-            const selectedCount = selectedValues ? selectedValues.length : 0;
+            var $description = $select.next('.description');
+            var selectedCount = selectedValues ? selectedValues.length : 0;
             
             if (selectedCount > 1) {
                 $description.text('Selected ' + selectedCount + ' products. Each coupon will include all selected products as free gifts.');
@@ -136,25 +151,36 @@ jQuery(document).ready(function($) {
             }
         },
         
+        /**
+         * Validate the entire form and show errors if any
+         * @param {Object} $form - The jQuery form object
+         * @returns {boolean} - Whether the form is valid
+         */
         validateForm: function($form) {
-            const errors = [];
-            let isValid = true;
+            var self = this;
+            var errors = [];
+            var isValid = true;
             
             // Validate individual form sections
-            isValid = this.validateProductSelection(errors) && isValid;
-            isValid = this.validateCouponCount(errors, isValid) && isValid;
-            isValid = this.validateCouponPrefix(errors, isValid) && isValid;
+            isValid = self.validateProductSelection(errors) && isValid;
+            isValid = self.validateCouponCountForm(errors, isValid) && isValid;
+            isValid = self.validateCouponPrefix(errors, isValid) && isValid;
             
             // Show errors if any
             if (errors.length > 0) {
-                this.showErrorMessage(errors.join('\n'));
+                self.showErrorMessage(errors.join('\n'));
             }
             
             return isValid;
         },
         
+        /**
+         * Validate product selection
+         * @param {Array} errors - Array to push error messages to
+         * @returns {boolean} - Whether product selection is valid
+         */
         validateProductSelection: function(errors) {
-            const productIds = $('#product_id').val();
+            var productIds = $('#product_id').val();
             if (!productIds || productIds.length === 0) {
                 errors.push('Please select at least one product.');
                 $('#product_id').addClass('error').focus();
@@ -163,9 +189,15 @@ jQuery(document).ready(function($) {
             return true;
         },
         
-        validateCouponCount: function(errors, isValid) {
-            const couponCountInput = $('#number_of_coupons').val();
-            const couponCount = parseInt(couponCountInput, 10);
+        /**
+         * Validate coupon count form field
+         * @param {Array} errors - Array to push error messages to
+         * @param {boolean} isValid - Current validation state
+         * @returns {boolean} - Whether coupon count is valid
+         */
+        validateCouponCountForm: function(errors, isValid) {
+            var couponCountInput = $('#number_of_coupons').val();
+            var couponCount = parseInt(couponCountInput, 10);
             
             if (!couponCountInput || isNaN(couponCount) || couponCount < 1) {
                 errors.push('Please enter a valid number of coupons (minimum 1).');
@@ -186,8 +218,14 @@ jQuery(document).ready(function($) {
             return true;
         },
         
+        /**
+         * Validate coupon prefix
+         * @param {Array} errors - Array to push error messages to
+         * @param {boolean} isValid - Current validation state
+         * @returns {boolean} - Whether coupon prefix is valid
+         */
         validateCouponPrefix: function(errors, isValid) {
-            const prefix = $('#coupon_prefix').val();
+            var prefix = $('#coupon_prefix').val();
             if (prefix && prefix.length > 10) {
                 errors.push('Coupon prefix must be 10 characters or less.');
                 if (isValid) {
@@ -198,6 +236,9 @@ jQuery(document).ready(function($) {
             return true;
         },
         
+        /**
+         * Initialize form validation event handlers
+         */
         initFormValidation: function() {
             // Real-time validation - remove error styling on focus/input
             $('#product_id, #number_of_coupons, #coupon_prefix').on('focus input change', function() {
@@ -206,8 +247,8 @@ jQuery(document).ready(function($) {
             
             // Additional validation for coupon prefix
             $('#coupon_prefix').on('input', function() {
-                const $this = $(this);
-                let value = $this.val();
+                var $this = $(this);
+                var value = $this.val();
                 
                 // Remove invalid characters and enforce length
                 value = value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
@@ -219,6 +260,10 @@ jQuery(document).ready(function($) {
             });
         },
         
+        /**
+         * Display error message to user
+         * @param {string} message - The error message to display
+         */
         showErrorMessage: function(message) {
             // Remove existing error messages
             $('.scg-error-message').remove();
@@ -230,13 +275,13 @@ jQuery(document).ready(function($) {
             message = message.substring(0, 500); // Limit message length
             
             // Create and show error message - use text() to prevent XSS
-            // Codacy false positive: HTML is static template, content is added via .text() method
-            const $errorDiv = $('<div class="notice notice-error scg-error-message"><p></p></div>');
+            // Static HTML template, content is added via .text() method
+            var $errorDiv = $('<div class="notice notice-error scg-error-message"><p></p></div>');
             $errorDiv.find('p').text(message); // Safe: .text() prevents XSS
             $('.scg-form').before($errorDiv); // Safe: $errorDiv contains no user data
             
             // Scroll to error message with bounds checking
-            const errorOffset = $errorDiv.offset();
+            var errorOffset = $errorDiv.offset();
             if (errorOffset && errorOffset.top) {
                 $('html, body').animate({
                     scrollTop: Math.max(0, errorOffset.top - 50)
@@ -251,6 +296,10 @@ jQuery(document).ready(function($) {
             }, 5000);
         },
         
+        /**
+         * Display success message to user
+         * @param {string} message - The success message to display
+         */
         showSuccessMessage: function(message) {
             // Sanitize message
             if (typeof message !== 'string') {
@@ -258,13 +307,13 @@ jQuery(document).ready(function($) {
             }
             message = message.substring(0, 500); // Limit message length
             
-            // Codacy false positive: HTML is static template, content is added via .text() method
-            const $successDiv = $('<div class="notice notice-success is-dismissible"><p></p></div>');
+            // Static HTML template, content is added via .text() method
+            var $successDiv = $('<div class="notice notice-success is-dismissible"><p></p></div>');
             $successDiv.find('p').text(message); // Safe: .text() prevents XSS
             $('.scg-form').before($successDiv); // Safe: $successDiv contains no user data
             
             // Scroll to success message with bounds checking
-            const successOffset = $successDiv.offset();
+            var successOffset = $successDiv.offset();
             if (successOffset && successOffset.top) {
                 $('html, body').animate({
                     scrollTop: Math.max(0, successOffset.top - 50)
@@ -279,7 +328,7 @@ jQuery(document).ready(function($) {
     // Handle page unload during form submission
     $(window).on('beforeunload', function() {
         if ($('.scg-form').hasClass('loading')) {
-            return 'Coupon generation is in progress. Are you sure you want to leave?';
+            return 'Coupon generation is in progress. Are you sure you want to leave this page?';
         }
     });
     

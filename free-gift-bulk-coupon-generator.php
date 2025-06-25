@@ -443,7 +443,8 @@ class WooCommerceFreeGiftBulkCoupons {
      */
     private function generate_coupon_code($prefix = '') {
         $code_length = 12;
-        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        // Only lowercase letters
+        $characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
         $random_string = '';
         
         for ($i = 0; $i < $code_length; $i++) {
@@ -452,7 +453,7 @@ class WooCommerceFreeGiftBulkCoupons {
         
         // Add prefix if provided
         if (!empty($prefix)) {
-            return strtoupper($prefix) . '-' . $random_string;
+            return strtolower($prefix) . '-' . $random_string;
         }
         
         return $random_string;
