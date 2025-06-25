@@ -300,9 +300,8 @@ class WooCommerceFreeGiftBulkCoupons {
      */
     private function prepare_gift_info($valid_products) {
         $gift_info = array();
-        // Codacy false positive: $product variable is intentionally unused here
-        // We only need the product_id from the key, not the product object
-        foreach ($valid_products as $product_id => $product) { // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall.NotAllowed
+        // Use array_keys to avoid unused variable warning
+        foreach (array_keys($valid_products) as $product_id) {
             $gift_info[$product_id] = array(
                 'product_id' => $product_id,
                 'variation_id' => 0,
@@ -438,6 +437,26 @@ class WooCommerceFreeGiftBulkCoupons {
                 array('source' => 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator')
             );
         }
+    }
+
+    /**
+     * Generate unique coupon code
+     */
+    private function generate_coupon_code($prefix = '') {
+        $code_length = 12;
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        $random_string = '';
+        
+        for ($i = 0; $i < $code_length; $i++) {
+            $random_string .= $characters[wp_rand(0, strlen($characters) - 1)];
+        }
+        
+        // Add prefix if provided
+        if (!empty($prefix)) {
+            return strtoupper($prefix) . '-' . $random_string;
+        }
+        
+        return $random_string;
     }
     
     /**
