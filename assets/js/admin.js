@@ -90,9 +90,11 @@ jQuery(document).ready(function($) {
             
             if (numValue > 100) {
                 $input.val('100');
+                // Codacy false positive: Static HTML template with no user input
                 $input.after('<span id="coupon-count-warning" style="color: #d63638; font-size: 12px; display: block; margin-top: 5px;">Maximum 100 coupons allowed</span>');
             } else if (numValue > 50) {
                 $input.val(numValue);
+                // Codacy false positive: Static HTML template with no user input
                 $input.after('<span id="coupon-count-warning" style="color: #dba617; font-size: 12px; display: block; margin-top: 5px;">Generating many coupons may take some time and could timeout</span>');
             } else {
                 $input.val(numValue);
@@ -124,18 +126,33 @@ jQuery(document).ready(function($) {
         },
         
         validateForm: function($form) {
-            let isValid = true;
             const errors = [];
+            let isValid = true;
             
-            // Validate product selection
+            // Validate individual form sections
+            isValid = this.validateProductSelection(errors) && isValid;
+            isValid = this.validateCouponCount(errors, isValid) && isValid;
+            isValid = this.validateCouponPrefix(errors, isValid) && isValid;
+            
+            // Show errors if any
+            if (errors.length > 0) {
+                this.showErrorMessage(errors.join('\n'));
+            }
+            
+            return isValid;
+        },
+        
+        validateProductSelection: function(errors) {
             const productIds = $('#product_id').val();
             if (!productIds || productIds.length === 0) {
                 errors.push('Please select at least one product.');
                 $('#product_id').addClass('error').focus();
-                isValid = false;
+                return false;
             }
-            
-            // Validate coupon count
+            return true;
+        },
+        
+        validateCouponCount: function(errors, isValid) {
             const couponCountInput = $('#number_of_coupons').val();
             const couponCount = parseInt(couponCountInput, 10);
             
@@ -144,31 +161,30 @@ jQuery(document).ready(function($) {
                 if (isValid) {
                     $('#number_of_coupons').addClass('error').focus();
                 }
-                isValid = false;
-            } else if (couponCount > 100) {
+                return false;
+            }
+            
+            if (couponCount > 100) {
                 errors.push('Maximum number of coupons is 100.');
                 if (isValid) {
                     $('#number_of_coupons').addClass('error').focus();
                 }
-                isValid = false;
+                return false;
             }
             
-            // Validate coupon prefix if provided
+            return true;
+        },
+        
+        validateCouponPrefix: function(errors, isValid) {
             const prefix = $('#coupon_prefix').val();
             if (prefix && prefix.length > 10) {
                 errors.push('Coupon prefix must be 10 characters or less.');
                 if (isValid) {
                     $('#coupon_prefix').addClass('error').focus();
                 }
-                isValid = false;
+                return false;
             }
-            
-            // Show errors if any
-            if (errors.length > 0) {
-                this.showErrorMessage(errors.join('\n'));
-            }
-            
-            return isValid;
+            return true;
         },
         
         initFormValidation: function() {
@@ -203,9 +219,10 @@ jQuery(document).ready(function($) {
             message = message.substring(0, 500); // Limit message length
             
             // Create and show error message - use text() to prevent XSS
+            // Codacy false positive: HTML is static template, content is added via .text() method
             const $errorDiv = $('<div class="notice notice-error scg-error-message"><p></p></div>');
-            $errorDiv.find('p').text(message);
-            $('.scg-form').before($errorDiv);
+            $errorDiv.find('p').text(message); // Safe: .text() prevents XSS
+            $('.scg-form').before($errorDiv); // Safe: $errorDiv contains no user data
             
             // Scroll to error message with bounds checking
             const errorOffset = $errorDiv.offset();
@@ -230,9 +247,10 @@ jQuery(document).ready(function($) {
             }
             message = message.substring(0, 500); // Limit message length
             
+            // Codacy false positive: HTML is static template, content is added via .text() method
             const $successDiv = $('<div class="notice notice-success is-dismissible"><p></p></div>');
-            $successDiv.find('p').text(message);
-            $('.scg-form').before($successDiv);
+            $successDiv.find('p').text(message); // Safe: .text() prevents XSS
+            $('.scg-form').before($successDiv); // Safe: $successDiv contains no user data
             
             // Scroll to success message with bounds checking
             const successOffset = $successDiv.offset();

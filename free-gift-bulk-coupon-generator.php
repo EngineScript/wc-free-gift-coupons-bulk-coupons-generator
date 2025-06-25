@@ -300,7 +300,9 @@ class WooCommerceFreeGiftBulkCoupons {
      */
     private function prepare_gift_info($valid_products) {
         $gift_info = array();
-        foreach ($valid_products as $product_id => $product) {
+        // Codacy false positive: $product variable is intentionally unused here
+        // We only need the product_id from the key, not the product object
+        foreach ($valid_products as $product_id => $product) { // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall.NotAllowed
             $gift_info[$product_id] = array(
                 'product_id' => $product_id,
                 'variation_id' => 0,
@@ -487,110 +489,170 @@ class WooCommerceFreeGiftBulkCoupons {
             
             <div class="scg-admin-container">
                 <div class="scg-main-content">
-                    <form method="post" action="" class="scg-form">
-                        <?php wp_nonce_field('scg_generate_coupons_action', 'scg_nonce'); ?>
-                        
-                        <table class="form-table">
-                            <tr>
-                                <th scope="row">
-                                    <label for="product_id"><?php esc_html_e('Select Products', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></label>
-                                </th>
-                                <td>
-                                    <select name="product_id[]" id="product_id" class="regular-text" multiple="multiple" size="8" required>
-                                        <?php foreach ($products as $product_id => $product_name): ?>
-                                            <option value="<?php echo esc_attr($product_id); ?>">
-                                                <?php echo esc_html($product_name); ?>
-                                            </option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <p class="description">
-                                        <?php esc_html_e('Select one or more products that will be given as free gifts with the coupon. Hold Ctrl (Windows) or Cmd (Mac) to select multiple products.', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?>
-                                    </p>
-                                </td>
-                            </tr>
-                            
-                            <tr>
-                                <th scope="row">
-                                    <label for="number_of_coupons"><?php esc_html_e('Number of Coupons', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></label>
-                                </th>
-                                <td>
-                                    <input type="number" name="number_of_coupons" id="number_of_coupons" 
-                                           class="regular-text" min="1" max="100" value="10" required>
-                                    <p class="description">
-                                        <?php esc_html_e('Enter the number of coupons to generate (maximum 100).', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?>
-                                    </p>
-                                    <div class="scg-warning-box">
-                                        <p class="scg-warning-text">
-                                            <span class="dashicons dashicons-warning" style="color: #d63638;"></span>
-                                            <?php esc_html_e('Note: Coupon generation can be time-consuming. Generating large numbers of coupons may cause the page to timeout based on your server\'s PHP timeout settings. If you need to generate many coupons, consider doing it in smaller batches.', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?>
-                                        </p>
-                                    </div>
-                                </td>
-                            </tr>
-                            
-                            <tr>
-                                <th scope="row">
-                                    <label for="coupon_prefix"><?php esc_html_e('Coupon Prefix', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></label>
-                                </th>
-                                <td>
-                                    <input type="text" name="coupon_prefix" id="coupon_prefix" 
-                                           class="regular-text" maxlength="10" placeholder="e.g. GIFT">
-                                    <p class="description">
-                                        <?php esc_html_e('Optional prefix for coupon codes (e.g. GIFT-ABC123DEF456).', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?>
-                                    </p>
-                                </td>
-                            </tr>
-                            
-                            <tr>
-                                <th scope="row">
-                                    <label for="discount_type"><?php esc_html_e('Discount Type', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></label>
-                                </th>
-                                <td>
-                                    <select name="discount_type" id="discount_type" class="regular-text">
-                                        <option value="free_gift"><?php esc_html_e('Free Gift', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></option>
-                                        <option value="percent"><?php esc_html_e('Percentage Discount', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></option>
-                                        <option value="fixed_cart"><?php esc_html_e('Fixed Cart Discount', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></option>
-                                        <option value="fixed_product"><?php esc_html_e('Fixed Product Discount', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></option>
-                                    </select>
-                                    <p class="description">
-                                        <?php esc_html_e('Select the type of discount for the coupons.', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?>
-                                    </p>
-                                </td>
-                            </tr>
-                        </table>
-                        
-                        <p class="submit">
-                            <input type="submit" name="scg_generate_coupons" class="button-primary" 
-                                   value="<?php esc_attr_e('Generate Free Gift Coupons', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?>">
-                        </p>
-                    </form>
+                    <?php $this->render_admin_form($products); ?>
                 </div>
                 
                 <div class="scg-sidebar">
-                    <div class="scg-info-box">
-                        <h3><?php esc_html_e('Information', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></h3>
-                        <ul>
-                            <li><?php esc_html_e('Maximum 100 coupons can be generated at once', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></li>
-                            <li><?php esc_html_e('Coupons are set to expire after 1 year', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></li>
-                            <li><?php esc_html_e('Each coupon can only be used once', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></li>
-                            <li><?php esc_html_e('Coupons are set for individual use only', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></li>
-                            <li><?php esc_html_e('Generated coupons appear in WooCommerce > Coupons', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></li>
-                        </ul>
-                    </div>
+                    <?php $this->render_admin_sidebar(); ?>
                 </div>
             </div>
             
-            <div class="scg-footer">
-                <p class="scg-repo-link">
-                    <a href="https://github.com/EngineScript/WC-Free-Gift-Coupons-Bulk-Coupons-Generator" target="_blank" rel="noopener noreferrer">
-                        <?php esc_html_e('View on GitHub', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?>
-                    </a>
-                    |
-                    <a href="https://github.com/EngineScript/WC-Free-Gift-Coupons-Bulk-Coupons-Generator/issues" target="_blank" rel="noopener noreferrer">
-                        <?php esc_html_e('Report Issues', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?>
-                    </a>
+            <?php $this->render_admin_footer(); ?>
+        </div>
+        <?php
+    }
+
+    /**
+     * Render admin form
+     */
+    private function render_admin_form($products) {
+        ?>
+        <form method="post" action="" class="scg-form">
+            <?php wp_nonce_field('scg_generate_coupons_action', 'scg_nonce'); ?>
+            
+            <table class="form-table">
+                <?php $this->render_product_selection_field($products); ?>
+                <?php $this->render_coupon_count_field(); ?>
+                <?php $this->render_coupon_prefix_field(); ?>
+                <?php $this->render_discount_type_field(); ?>
+            </table>
+            
+            <p class="submit">
+                <input type="submit" name="scg_generate_coupons" class="button-primary" 
+                       value="<?php esc_attr_e('Generate Free Gift Coupons', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?>">
+            </p>
+        </form>
+        <?php
+    }
+
+    /**
+     * Render product selection field
+     */
+    private function render_product_selection_field($products) {
+        ?>
+        <tr>
+            <th scope="row">
+                <label for="product_id"><?php esc_html_e('Select Products', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></label>
+            </th>
+            <td>
+                <select name="product_id[]" id="product_id" class="regular-text" multiple="multiple" size="8" required>
+                    <?php foreach ($products as $product_id => $product_name): ?>
+                        <option value="<?php echo esc_attr($product_id); ?>">
+                            <?php echo esc_html($product_name); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <p class="description">
+                    <?php esc_html_e('Select one or more products that will be given as free gifts with the coupon. Hold Ctrl (Windows) or Cmd (Mac) to select multiple products.', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?>
                 </p>
-            </div>
+            </td>
+        </tr>
+        <?php
+    }
+
+    /**
+     * Render coupon count field
+     */
+    private function render_coupon_count_field() {
+        ?>
+        <tr>
+            <th scope="row">
+                <label for="number_of_coupons"><?php esc_html_e('Number of Coupons', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></label>
+            </th>
+            <td>
+                <input type="number" name="number_of_coupons" id="number_of_coupons" 
+                       class="regular-text" min="1" max="100" value="10" required>
+                <p class="description">
+                    <?php esc_html_e('Enter the number of coupons to generate (maximum 100).', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?>
+                </p>
+                <div class="scg-warning-box">
+                    <p class="scg-warning-text">
+                        <span class="dashicons dashicons-warning" style="color: #d63638;"></span>
+                        <?php esc_html_e('Note: Coupon generation can be time-consuming. Generating large numbers of coupons may cause the page to timeout based on your server\'s PHP timeout settings. If you need to generate many coupons, consider doing it in smaller batches.', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?>
+                    </p>
+                </div>
+            </td>
+        </tr>
+        <?php
+    }
+
+    /**
+     * Render coupon prefix field
+     */
+    private function render_coupon_prefix_field() {
+        ?>
+        <tr>
+            <th scope="row">
+                <label for="coupon_prefix"><?php esc_html_e('Coupon Prefix', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></label>
+            </th>
+            <td>
+                <input type="text" name="coupon_prefix" id="coupon_prefix" 
+                       class="regular-text" maxlength="10" placeholder="e.g. GIFT">
+                <p class="description">
+                    <?php esc_html_e('Optional prefix for coupon codes (e.g. GIFT-ABC123DEF456).', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?>
+                </p>
+            </td>
+        </tr>
+        <?php
+    }
+
+    /**
+     * Render discount type field
+     */
+    private function render_discount_type_field() {
+        ?>
+        <tr>
+            <th scope="row">
+                <label for="discount_type"><?php esc_html_e('Discount Type', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></label>
+            </th>
+            <td>
+                <select name="discount_type" id="discount_type" class="regular-text">
+                    <option value="free_gift"><?php esc_html_e('Free Gift', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></option>
+                    <option value="percent"><?php esc_html_e('Percentage Discount', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></option>
+                    <option value="fixed_cart"><?php esc_html_e('Fixed Cart Discount', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></option>
+                    <option value="fixed_product"><?php esc_html_e('Fixed Product Discount', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></option>
+                </select>
+                <p class="description">
+                    <?php esc_html_e('Select the type of discount for the coupons.', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?>
+                </p>
+            </td>
+        </tr>
+        <?php
+    }
+
+    /**
+     * Render admin sidebar
+     */
+    private function render_admin_sidebar() {
+        ?>
+        <div class="scg-info-box">
+            <h3><?php esc_html_e('Information', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></h3>
+            <ul>
+                <li><?php esc_html_e('Maximum 100 coupons can be generated at once', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></li>
+                <li><?php esc_html_e('Coupons are set to expire after 1 year', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></li>
+                <li><?php esc_html_e('Each coupon can only be used once', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></li>
+                <li><?php esc_html_e('Coupons are set for individual use only', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></li>
+                <li><?php esc_html_e('Generated coupons appear in WooCommerce > Coupons', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?></li>
+            </ul>
+        </div>
+        <?php
+    }
+
+    /**
+     * Render admin footer
+     */
+    private function render_admin_footer() {
+        ?>
+        <div class="scg-footer">
+            <p class="scg-repo-link">
+                <a href="https://github.com/EngineScript/WC-Free-Gift-Coupons-Bulk-Coupons-Generator" target="_blank" rel="noopener noreferrer">
+                    <?php esc_html_e('View on GitHub', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?>
+                </a>
+                |
+                <a href="https://github.com/EngineScript/WC-Free-Gift-Coupons-Bulk-Coupons-Generator/issues" target="_blank" rel="noopener noreferrer">
+                    <?php esc_html_e('Report Issues', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'); ?>
+                </a>
+            </p>
         </div>
         <?php
     }

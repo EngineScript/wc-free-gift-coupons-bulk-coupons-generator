@@ -79,6 +79,9 @@ jobs:
           
           # WordPress version to use
           wp-version: 'latest'
+          
+        # Note: This plugin requires WooCommerce as a dependency
+        # WooCommerce compatibility is tested separately in wp-version-test job
       
       - name: Create issue on plugin check failure
         if: ${{ failure() }}
@@ -590,9 +593,31 @@ jobs:
                   $this->assertNotEmpty($wp_version, 'WordPress version should be available');
                   
                   // Test that we're running on a supported WordPress version
-                  $min_wp_version = '5.0';
+                  $min_wp_version = '6.0';
                   $this->assertTrue(version_compare($wp_version, $min_wp_version, '>='), 
                       "WordPress version {$wp_version} should be >= {$min_wp_version}");
+              }
+              
+              public function test_woocommerce_loaded() {
+                  $this->assertTrue(class_exists('WooCommerce'), 'WooCommerce should be loaded');
+                  $this->assertTrue(function_exists('WC'), 'WooCommerce WC() function should be available');
+              }
+              
+              public function test_woocommerce_version_compatibility() {
+                  if (class_exists('WooCommerce')) {
+                      global $woocommerce;
+                      if ($woocommerce && isset($woocommerce->version)) {
+                          $wc_version = $woocommerce->version;
+                          $min_wc_version = '5.0';
+                          $this->assertTrue(version_compare($wc_version, $min_wc_version, '>='), 
+                              "WooCommerce version {$wc_version} should be >= {$min_wc_version}");
+                      }
+                  }
+              }
+              
+              public function test_plugin_dependencies() {
+                  // Test that our plugin recognizes WooCommerce dependency
+                  $this->assertTrue(class_exists('WooCommerceFreeGiftBulkCoupons'), 'Main plugin class should exist');
               }
           }
           EOF
@@ -620,6 +645,69 @@ jobs:
       - name: Setup WP Tests
         run: |
           bash tests/bin/install-wp-tests.sh wordpress_test root root 127.0.0.1:3306 ${{ matrix.wp-version }}
+
+      - name: Install WooCommerce Plugin
+        run: |
+          echo "Installing WooCommerce plugin for testing..."
+          WP_CORE_DIR=${WP_CORE_DIR-/tmp/wordpress/}
+          PLUGINS_DIR="$WP_CORE_DIR/wp-content/plugins"
+          
+          # Create plugins directory if it doesn't exist
+          mkdir -p "$PLUGINS_DIR"
+          
+          # Download latest WooCommerce from WordPress.org
+          echo "Downloading WooCommerce..."
+          curl -L -o /tmp/woocommerce.zip "https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"
+          
+          # Extract WooCommerce to plugins directory
+          echo "Extracting WooCommerce..."
+          unzip -q /tmp/woocommerce.zip -d "$PLUGINS_DIR"
+          
+          # Verify WooCommerce was installed
+          if [ -d "$PLUGINS_DIR/woocommerce" ]; then
+            echo "✅ WooCommerce successfully installed at $PLUGINS_DIR/woocommerce"
+            ls -la "$PLUGINS_DIR/woocommerce/" | head -10
+          else
+            echo "❌ WooCommerce installation failed"
+            exit 1
+          fi
+
+      - name: Update Bootstrap to Load WooCommerce
+        run: |
+          cat > tests/bootstrap.php << 'EOF'
+          <?php
+          /**
+           * PHPUnit bootstrap file for plugin tests.
+           *
+           * @package Free_Gift_Bulk_Coupon_Generator
+           */
+          
+          require_once '/tmp/wordpress-tests-lib/includes/functions.php';
+          
+          function _manually_load_plugins() {
+              // Disable widgets init to prevent errors
+              add_filter('widgets_init', function() {
+                  return;
+              }, 0);
+              
+              // Load WooCommerce first (dependency)
+              $wc_plugin_file = '/tmp/wordpress/wp-content/plugins/woocommerce/woocommerce.php';
+              if (file_exists($wc_plugin_file)) {
+                  require_once $wc_plugin_file;
+                  echo "WooCommerce loaded for testing\n";
+              } else {
+                  echo "Warning: WooCommerce not found at $wc_plugin_file\n";
+              }
+              
+              // Load our plugin
+              require dirname( dirname( __FILE__ ) ) . '/free-gift-bulk-coupon-generator.php';
+              echo "Free Gift Bulk Coupon Generator loaded for testing\n";
+          }
+          
+          tests_add_filter( 'muplugins_loaded', '_manually_load_plugins' );
+          
+          require '/tmp/wordpress-tests-lib/includes/bootstrap.php';
+          EOF
 
       - name: Run plugin test
         run: vendor/bin/phpunit --config phpunit.xml
