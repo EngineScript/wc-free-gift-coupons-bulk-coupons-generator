@@ -70,17 +70,32 @@ jQuery(document).ready(function($) {
         
         validateCouponCount: function() {
             const $input = $(this);
-            const value = parseInt($input.val(), 10);
+            let value = $input.val();
             const $warning = $('#coupon-count-warning');
             
             // Remove existing warning
             $warning.remove();
             
-            if (value > 100) {
-                $input.val(100);
+            // Sanitize input - remove non-numeric characters except the first character for negative sign
+            value = value.replace(/[^\d]/g, '');
+            
+            // Parse as integer
+            const numValue = parseInt(value, 10);
+            
+            // Validate range
+            if (isNaN(numValue) || numValue < 1) {
+                $input.val('1');
+                return;
+            }
+            
+            if (numValue > 100) {
+                $input.val('100');
                 $input.after('<span id="coupon-count-warning" style="color: #d63638; font-size: 12px; display: block; margin-top: 5px;">Maximum 100 coupons allowed</span>');
-            } else if (value > 50) {
+            } else if (numValue > 50) {
+                $input.val(numValue);
                 $input.after('<span id="coupon-count-warning" style="color: #dba617; font-size: 12px; display: block; margin-top: 5px;">Generating many coupons may take some time and could timeout</span>');
+            } else {
+                $input.val(numValue);
             }
         },
         
@@ -116,19 +131,35 @@ jQuery(document).ready(function($) {
             const productIds = $('#product_id').val();
             if (!productIds || productIds.length === 0) {
                 errors.push('Please select at least one product.');
-                $('#product_id').focus();
+                $('#product_id').addClass('error').focus();
                 isValid = false;
             }
             
             // Validate coupon count
-            const couponCount = parseInt($('#number_of_coupons').val(), 10);
-            if (!couponCount || couponCount < 1) {
-                errors.push('Please enter a valid number of coupons.');
-                if (isValid) $('#number_of_coupons').focus();
+            const couponCountInput = $('#number_of_coupons').val();
+            const couponCount = parseInt(couponCountInput, 10);
+            
+            if (!couponCountInput || isNaN(couponCount) || couponCount < 1) {
+                errors.push('Please enter a valid number of coupons (minimum 1).');
+                if (isValid) {
+                    $('#number_of_coupons').addClass('error').focus();
+                }
                 isValid = false;
             } else if (couponCount > 100) {
                 errors.push('Maximum number of coupons is 100.');
-                if (isValid) $('#number_of_coupons').focus();
+                if (isValid) {
+                    $('#number_of_coupons').addClass('error').focus();
+                }
+                isValid = false;
+            }
+            
+            // Validate coupon prefix if provided
+            const prefix = $('#coupon_prefix').val();
+            if (prefix && prefix.length > 10) {
+                errors.push('Coupon prefix must be 10 characters or less.');
+                if (isValid) {
+                    $('#coupon_prefix').addClass('error').focus();
+                }
                 isValid = false;
             }
             
@@ -141,9 +172,23 @@ jQuery(document).ready(function($) {
         },
         
         initFormValidation: function() {
-            // Real-time validation
-            $('#product_id, #number_of_coupons').on('blur', function() {
+            // Real-time validation - remove error styling on focus/input
+            $('#product_id, #number_of_coupons, #coupon_prefix').on('focus input change', function() {
                 $(this).removeClass('error');
+            });
+            
+            // Additional validation for coupon prefix
+            $('#coupon_prefix').on('input', function() {
+                const $this = $(this);
+                let value = $this.val();
+                
+                // Remove invalid characters and enforce length
+                value = value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+                if (value.length > 10) {
+                    value = value.substring(0, 10);
+                }
+                
+                $this.val(value);
             });
         },
         
@@ -151,33 +196,51 @@ jQuery(document).ready(function($) {
             // Remove existing error messages
             $('.scg-error-message').remove();
             
+            // Sanitize message by ensuring it's a string and limiting length
+            if (typeof message !== 'string') {
+                message = String(message);
+            }
+            message = message.substring(0, 500); // Limit message length
+            
             // Create and show error message - use text() to prevent XSS
             const $errorDiv = $('<div class="notice notice-error scg-error-message"><p></p></div>');
             $errorDiv.find('p').text(message);
             $('.scg-form').before($errorDiv);
             
-            // Scroll to error message
-            $('html, body').animate({
-                scrollTop: $errorDiv.offset().top - 50
-            }, 300);
+            // Scroll to error message with bounds checking
+            const errorOffset = $errorDiv.offset();
+            if (errorOffset && errorOffset.top) {
+                $('html, body').animate({
+                    scrollTop: Math.max(0, errorOffset.top - 50)
+                }, 300);
+            }
             
             // Auto-hide after 5 seconds
             setTimeout(function() {
-                $errorDiv.fadeOut(function() {
+                $errorDiv.fadeOut(400, function() {
                     $(this).remove();
                 });
             }, 5000);
         },
         
         showSuccessMessage: function(message) {
+            // Sanitize message
+            if (typeof message !== 'string') {
+                message = String(message);
+            }
+            message = message.substring(0, 500); // Limit message length
+            
             const $successDiv = $('<div class="notice notice-success is-dismissible"><p></p></div>');
             $successDiv.find('p').text(message);
             $('.scg-form').before($successDiv);
             
-            // Scroll to success message
-            $('html, body').animate({
-                scrollTop: $successDiv.offset().top - 50
-            }, 300);
+            // Scroll to success message with bounds checking
+            const successOffset = $successDiv.offset();
+            if (successOffset && successOffset.top) {
+                $('html, body').animate({
+                    scrollTop: Math.max(0, successOffset.top - 50)
+                }, 300);
+            }
         }
     };
     

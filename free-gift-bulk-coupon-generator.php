@@ -242,15 +242,34 @@ class WooCommerceFreeGiftBulkCoupons {
      * Generate coupons
      */
     private function generate_coupons($product_ids, $number_of_coupons, $prefix = '', $discount_type = 'free_gift') {
-        $generated_count = 0;
-        $max_attempts = $number_of_coupons * 2; // Prevent infinite loops
-        $attempt_count = 0;
-        
+        $valid_products = $this->validate_products($product_ids);
+        if (empty($valid_products)) {
+            return 0;
+        }
+
+        $generation_params = $this->prepare_generation_params($number_of_coupons, $prefix, $discount_type);
+        $gift_info = $this->prepare_gift_info($valid_products);
+
+        // Fire before generation action
+        do_action('scg_before_coupon_generation', $product_ids, $generation_params['count']);
+
+        $generated_count = $this->execute_coupon_generation($valid_products, $gift_info, $generation_params);
+
+        // Fire after generation action
+        do_action('scg_after_coupon_generation', $product_ids, $generated_count);
+
+        return $generated_count;
+    }
+
+    /**
+     * Validate products for coupon generation
+     */
+    private function validate_products($product_ids) {
         // Ensure product_ids is an array
         if (!is_array($product_ids)) {
             $product_ids = array($product_ids);
         }
-        
+
         // Validate all products exist
         $valid_products = array();
         foreach ($product_ids as $product_id) {
@@ -259,19 +278,27 @@ class WooCommerceFreeGiftBulkCoupons {
                 $valid_products[$product_id] = $product;
             }
         }
-        
-        if (empty($valid_products)) {
-            return 0;
-        }
-        
-        // Apply filters for customization
-        $number_of_coupons = apply_filters('scg_max_coupons_per_batch', $number_of_coupons);
-        $expiry_days = apply_filters('scg_coupon_expiry_days', 365);
-        
-        // Fire before generation action
-        do_action('scg_before_coupon_generation', $product_ids, $number_of_coupons);
-        
-        // Prepare gift info for free_gift type coupons (multiple products)
+
+        return $valid_products;
+    }
+
+    /**
+     * Prepare generation parameters
+     */
+    private function prepare_generation_params($number_of_coupons, $prefix, $discount_type) {
+        return array(
+            'count' => apply_filters('scg_max_coupons_per_batch', $number_of_coupons),
+            'prefix' => $prefix,
+            'discount_type' => $discount_type,
+            'expiry_days' => apply_filters('scg_coupon_expiry_days', 365),
+            'max_attempts' => $number_of_coupons * 2,
+        );
+    }
+
+    /**
+     * Prepare gift information for coupons
+     */
+    private function prepare_gift_info($valid_products) {
         $gift_info = array();
         foreach ($valid_products as $product_id => $product) {
             $gift_info[$product_id] = array(
@@ -280,121 +307,135 @@ class WooCommerceFreeGiftBulkCoupons {
                 'quantity' => 1,
             );
         }
-        
-        for ($i = 1; $i <= $number_of_coupons; $i++) {
+        return $gift_info;
+    }
+
+    /**
+     * Execute the coupon generation process
+     */
+    private function execute_coupon_generation($valid_products, $gift_info, $params) {
+        $generated_count = 0;
+        $attempt_count = 0;
+
+        for ($i = 1; $i <= $params['count']; $i++) {
             // Prevent infinite loops
-            if ($attempt_count >= $max_attempts) {
+            if ($attempt_count >= $params['max_attempts']) {
                 break;
             }
             $attempt_count++;
+
+            $coupon_created = $this->create_single_coupon($valid_products, $gift_info, $params, $i);
             
-            try {
-                $coupon = new WC_Coupon();
-                
-                // Generate unique coupon code
-                $random_code = $this->generate_coupon_code($prefix);
-                
-                // Skip if code already exists
-                if (wc_get_coupon_id_by_code($random_code)) {
-                    $i--; // Try again with same counter
-                    continue;
-                }
-                
-                // Create product names list for description
-                $product_names = array();
-                foreach ($valid_products as $product) {
-                    $product_names[] = $product->get_name();
-                }
-                $products_text = count($product_names) > 1 ? 
-                    implode(', ', array_slice($product_names, 0, -1)) . ' and ' . end($product_names) :
-                    $product_names[0];
-                
-                // Set coupon properties
-                $coupon->set_code($random_code);
-                $coupon->set_description(sprintf(
-                    /* translators: 1: Product names, 2: Current batch number, 3: Total number of coupons */
-                    __('Auto-generated coupon for %1$s (Batch %2$d/%3$d)', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'),
-                    $products_text,
-                    $i,
-                    $number_of_coupons
-                ));
-                $coupon->set_discount_type($discount_type);
-                $coupon->set_individual_use(true);
-                $coupon->set_usage_limit(1);
-                
-                // Set expiration date
-                $coupon->set_date_expires(time() + ($expiry_days * 24 * 60 * 60));
-                
-                // For free gift coupons, add the gift data
-                if ($discount_type === 'free_gift') {
-                    $coupon->update_meta_data('_wc_free_gift_coupon_data', $gift_info);
-                }
-                
-                // Add plugin identifier meta
-                $coupon->update_meta_data('_scg_generated', true);
-                $coupon->update_meta_data('_scg_product_ids', $product_ids);
-                $coupon->update_meta_data('_scg_generation_date', current_time('mysql'));
-                
-                // Save coupon
-                $coupon->save();
+            if ($coupon_created) {
                 $generated_count++;
-                
-                // Fire action after each coupon is generated
-                do_action('scg_coupon_generated', $coupon->get_id(), $product_ids);
-                
-                // Add small delay to prevent overwhelming the server
-                if ($i % 50 === 0) {
-                    usleep(100000); // 0.1 second delay every 50 coupons
-                }
-                
-            } catch (Exception $e) {
-                // Log error but continue with next coupon - don't expose sensitive details
-                // Only log in debug mode
-                if (defined('WP_DEBUG') && WP_DEBUG) {
-                    wc_get_logger()->error(
-                        sprintf(
-                            /* translators: %s: Error code */
-                            __('SCG Error generating coupon: %s', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'), 
-                            $e->getCode()
-                        ), 
-                        array('source' => 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator')
-                    );
-                }
+                $this->handle_generation_delay($i);
+            } else {
                 $i--; // Try again with same counter
-                continue;
             }
         }
-        
-        // Fire after generation action
-        do_action('scg_after_coupon_generation', $product_ids, $generated_count);
-        
+
         return $generated_count;
     }
-    
+
     /**
-     * Generate unique coupon code
+     * Create a single coupon
      */
-    private function generate_coupon_code($prefix = '') {
-        // Sanitize prefix
-        $prefix = sanitize_text_field($prefix);
-        if (!empty($prefix)) {
-            // Remove any non-alphanumeric characters and convert to uppercase
-            $prefix = preg_replace('/[^A-Za-z0-9]/', '', $prefix);
-            $prefix = strtoupper(substr($prefix, 0, 10));
-            if (!empty($prefix)) {
-                $prefix = $prefix . '-';
+    private function create_single_coupon($valid_products, $gift_info, $params, $current_number) {
+        try {
+            $coupon = new WC_Coupon();
+            
+            // Generate unique coupon code
+            $random_code = $this->generate_coupon_code($params['prefix']);
+            
+            // Skip if code already exists
+            if (wc_get_coupon_id_by_code($random_code)) {
+                return false;
             }
+
+            $this->set_coupon_properties($coupon, $random_code, $valid_products, $params, $current_number);
+            $this->set_coupon_metadata($coupon, $gift_info, $params);
+
+            // Save coupon
+            $coupon->save();
+
+            // Fire action after each coupon is generated
+            do_action('scg_coupon_generated', $coupon->get_id(), array_keys($valid_products));
+
+            return true;
+
+        } catch (Exception $e) {
+            $this->log_coupon_error($e);
+            return false;
         }
-        
-        // Generate cryptographically secure random string
-        if (function_exists('random_bytes')) {
-            $random_string = strtoupper(bin2hex(random_bytes(6))); // 12 chars
-        } else {
-            // Fallback for older PHP versions
-            $random_string = strtoupper(wp_generate_password(12, false, false));
+    }
+
+    /**
+     * Set coupon properties
+     */
+    private function set_coupon_properties($coupon, $code, $valid_products, $params, $current_number) {
+        // Create product names list for description
+        $product_names = array();
+        foreach ($valid_products as $product) {
+            $product_names[] = $product->get_name();
         }
-        
-        return $prefix . $random_string;
+        $products_text = count($product_names) > 1 ? 
+            implode(', ', array_slice($product_names, 0, -1)) . ' and ' . end($product_names) :
+            $product_names[0];
+
+        $coupon->set_code($code);
+        $coupon->set_description(sprintf(
+            /* translators: 1: Product names, 2: Current batch number, 3: Total number of coupons */
+            __('Auto-generated coupon for %1$s (Batch %2$d/%3$d)', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'),
+            $products_text,
+            $current_number,
+            $params['count']
+        ));
+        $coupon->set_discount_type($params['discount_type']);
+        $coupon->set_individual_use(true);
+        $coupon->set_usage_limit(1);
+        $coupon->set_date_expires(time() + ($params['expiry_days'] * 24 * 60 * 60));
+    }
+
+    /**
+     * Set coupon metadata
+     */
+    private function set_coupon_metadata($coupon, $gift_info, $params) {
+        // For free gift coupons, add the gift data
+        if ($params['discount_type'] === 'free_gift') {
+            $coupon->update_meta_data('_wc_free_gift_coupon_data', $gift_info);
+        }
+
+        // Add plugin identifier meta
+        $coupon->update_meta_data('_scg_generated', true);
+        $coupon->update_meta_data('_scg_product_ids', array_keys($gift_info));
+        $coupon->update_meta_data('_scg_generation_date', current_time('mysql'));
+    }
+
+    /**
+     * Handle generation delay for performance
+     */
+    private function handle_generation_delay($current_number) {
+        // Add small delay to prevent overwhelming the server
+        if ($current_number % 50 === 0) {
+            usleep(100000); // 0.1 second delay every 50 coupons
+        }
+    }
+
+    /**
+     * Log coupon generation errors
+     */
+    private function log_coupon_error($exception) {
+        // Only log in debug mode
+        if (defined('WP_DEBUG') && WP_DEBUG) {
+            wc_get_logger()->error(
+                sprintf(
+                    /* translators: %s: Error code */
+                    __('SCG Error generating coupon: %s', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator'), 
+                    $exception->getCode()
+                ), 
+                array('source' => 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator')
+            );
+        }
     }
     
     /**

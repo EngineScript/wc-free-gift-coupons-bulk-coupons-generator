@@ -27,7 +27,7 @@
   "scripts": {
     "phpcs": "phpcs --standard=phpcs.xml",
     "phpcs:fix": "phpcbf --standard=phpcs.xml",
-    "phpmd": "phpmd . text phpmd-wordpress.xml --exclude vendor",
+    "phpmd": "phpmd . text phpmd.xml --exclude vendor",
     "phpstan": "phpstan analyze --memory-limit=1G",
     "test": "phpunit",
     "check-all": [

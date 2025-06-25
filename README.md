@@ -1,6 +1,6 @@
 # WC Free Gift Coupons Bulk Coupon Generator
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/d81efac1703c4d3b8b998d2587cd696b)](https://app.codacy.com/gh/EngineScript/WC-Free-Gift-Coupons-Bulk-Coupons-Generator/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2c6de0b116fc421287600a34db137666)](https://app.codacy.com/gh/EngineScript/WC-Free-Gift-Coupons-Bulk-Coupons-Generator/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![License](https://img.shields.io/badge/License-GPL%20v3-green.svg?logo=gnu)](https://www.gnu.org/licenses/gpl-3.0.html)
 [![WordPress Compatible](https://img.shields.io/badge/WordPress-6.0%2B-blue.svg?logo=wordpress)](https://wordpress.org/)
 [![PHP Compatible](https://img.shields.io/badge/PHP-7.4%2B-purple.svg?logo=php)](https://www.php.net/)

@@ -157,6 +157,46 @@
     }
 }
 
+/* Form validation error styles */
+.scg-form input.error,
+.scg-form select.error {
+    border-color: #d63638 !important;
+    box-shadow: 0 0 2px rgba(214, 54, 56, 0.8);
+}
+
+.scg-form input.error:focus,
+.scg-form select.error:focus {
+    border-color: #d63638 !important;
+    box-shadow: 0 0 3px rgba(214, 54, 56, 0.8);
+}
+
+/* Error message styling */
+.scg-error-message {
+    margin: 15px 0;
+    animation: scg-fadeIn 0.3s ease-in;
+}
+
+.scg-error-message p {
+    white-space: pre-line; /* Allow line breaks in error messages */
+}
+
+@keyframes scg-fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Success message animation */
+.notice-success {
+    animation: scg-fadeIn 0.3s ease-in;
+}
+
+/* Disabled button styling */
+.scg-form .button-primary.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 /* Responsive design */
 @media screen and (max-width: 1024px) {
     .scg-admin-container {
