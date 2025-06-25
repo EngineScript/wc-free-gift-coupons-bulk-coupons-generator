@@ -5,7 +5,7 @@
 jQuery(document).ready(function($) {
     'use strict';
     
-    const SCG_Admin = {
+    var SCG_Admin = {
         
         init: function() {
             this.bindEvents();
@@ -20,18 +20,18 @@ jQuery(document).ready(function($) {
             $('#coupon_prefix').on('input', this.formatPrefix);
             
             // Number input validation
-            $('#number_of_coupons').on('input', this.validateCouponCount);
+            $('#number_of_coupons').on('input', this.validateNumberInput);
             
             // Product selection change
             $('#product_id').on('change', this.handleProductChange);
         },
         
         handleFormSubmission: function(e) {
-            const $form = $(this);
-            const $submitBtn = $form.find('.button-primary');
+            var $form = $(this);
+            var $submitBtn = $form.find('.button-primary');
             
             // Validate form before submission
-            if (!SCG_Admin.validateForm($form)) {
+            if (!SCG_Admin.validateForm()) {
                 e.preventDefault();
                 return false;
             }
@@ -41,12 +41,23 @@ jQuery(document).ready(function($) {
             $submitBtn.prop('disabled', true);
             
             // Show confirmation for large batches
-            const couponCount = parseInt($('#number_of_coupons').val(), 10);
+            var couponCount = parseInt($('#number_of_coupons').val(), 10);
             if (couponCount > 25) {
-                const confirmed = confirm(
+                var confirmed = confirm(
                     'You are about to generate ' + couponCount + ' coupons. ' +
                     'This may take a while and could potentially timeout depending on your server settings. Do you want to continue?'
                 );
+                
+                if (!confirmed) {
+                    $form.removeClass('loading');
+                    $submitBtn.prop('disabled', false);
+                    e.preventDefault();
+                    return false;
+                }
+            }
+            
+            return true;
+        },
                 
                 if (!confirmed) {
                     $form.removeClass('loading');

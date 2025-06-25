@@ -1,7 +1,5 @@
 <?php
-/ * Requires at least: 6.5
- * Tested up to: 6.8
- * Plugin Name: WC Free Gift Coupons Bulk Coupon Generator
+/* Plugin Name: WC Free Gift Coupons Bulk Coupon Generator
  * Plugin URI: https://github.com/EngineScript/WC-Free-Gift-Coupons-Bulk-Coupons-Generator
  * Description: Generate bulk free gift coupon codes that work with the Free Gift Coupons for WooCommerce plugin. Creates coupons with the proper data structure for free gift functionality.
  * Version: 1.0.0
