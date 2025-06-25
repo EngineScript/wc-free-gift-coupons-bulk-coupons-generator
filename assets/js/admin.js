@@ -1,11 +1,14 @@
 /**
  * WooCommerce Free Gift Bulk Coupons Generator Admin JavaScript
  * ES5-compatible code for maximum browser compatibility
+ * 
+ * Note: Filename follows WordPress conventions (admin.js) rather than TypeScript patterns
+ * This is a WordPress plugin asset file, not a TypeScript module
  */
 
 // Check if we're in a browser environment to avoid SSR issues
-if (typeof window !== 'undefined' && window.jQuery) {
-    jQuery(document).ready(function($) {
+if (typeof window !== 'undefined' && typeof window.jQuery !== 'undefined') {
+    window.jQuery(document).ready(function($) {
         'use strict';
         
         /**
@@ -82,9 +85,13 @@ if (typeof window !== 'undefined' && window.jQuery) {
         formatPrefix: function() {
             var value = $(this).val();
             // Remove special characters and convert to uppercase
-            var cleanValue = value.split('').map(function(char) {
-                return /[a-zA-Z0-9]/.test(char) ? char : '';
-            }).join('').toUpperCase();
+            var cleanValue = '';
+            for (var i = 0; i < value.length; i++) {
+                var char = value.charAt(i);
+                if (/[a-zA-Z0-9]/.test(char)) {
+                    cleanValue += char.toUpperCase();
+                }
+            }
             // Limit to 10 characters
             if (cleanValue.length > 10) {
                 cleanValue = cleanValue.substring(0, 10);
@@ -104,9 +111,13 @@ if (typeof window !== 'undefined' && window.jQuery) {
             $warning.remove();
             
             // Sanitize input - remove non-numeric characters
-            var cleanValue = value.split('').map(function(char) {
-                return /\d/.test(char) ? char : '';
-            }).join('');
+            var cleanValue = '';
+            for (var i = 0; i < value.length; i++) {
+                var char = value.charAt(i);
+                if (/\d/.test(char)) {
+                    cleanValue += char;
+                }
+            }
             
             // Parse as integer
             var numValue = parseInt(cleanValue, 10);
@@ -255,9 +266,13 @@ if (typeof window !== 'undefined' && window.jQuery) {
                 var value = $this.val();
                 
                 // Remove invalid characters and enforce length
-                var cleanValue = value.split('').map(function(char) {
-                    return /[A-Za-z0-9]/.test(char) ? char : '';
-                }).join('').toUpperCase();
+                var cleanValue = '';
+                for (var i = 0; i < value.length; i++) {
+                    var char = value.charAt(i);
+                    if (/[A-Za-z0-9]/.test(char)) {
+                        cleanValue += char.toUpperCase();
+                    }
+                }
                 if (cleanValue.length > 10) {
                     cleanValue = cleanValue.substring(0, 10);
                 }
