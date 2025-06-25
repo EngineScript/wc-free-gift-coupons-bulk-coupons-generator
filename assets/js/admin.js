@@ -3,13 +3,15 @@
  * ES5-compatible code for maximum browser compatibility
  */
 
-jQuery(document).ready(function($) {
-    'use strict';
-    
-    /**
-     * Main admin object for handling the coupon generator interface
-     */
-    var SCG_Admin = {
+// Check if we're in a browser environment to avoid SSR issues
+if (typeof window !== 'undefined' && window.jQuery) {
+    jQuery(document).ready(function($) {
+        'use strict';
+        
+        /**
+         * Main admin object for handling the coupon generator interface
+         */
+        var SCG_Admin = {
         
         /**
          * Initialize the admin functionality
@@ -38,15 +40,15 @@ jQuery(document).ready(function($) {
         
         /**
          * Handle form submission with validation and loading states
-         * @param {Event} e - The form submission event
-         * @returns {boolean} - Whether to proceed with submission
+         * @param e - The form submission event
+         * @returns Whether to proceed with submission
          */
         handleFormSubmission: function(e) {
             var $form = $(this);
             var $submitBtn = $form.find('.button-primary');
             
             // Validate form before submission
-            if (!SCG_Admin.validateForm($form)) {
+            if (!SCG_Admin.validateForm()) {
                 e.preventDefault();
                 return false;
             }
@@ -80,12 +82,14 @@ jQuery(document).ready(function($) {
         formatPrefix: function() {
             var value = $(this).val();
             // Remove special characters and convert to uppercase
-            value = value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+            var cleanValue = value.split('').map(function(char) {
+                return /[a-zA-Z0-9]/.test(char) ? char : '';
+            }).join('').toUpperCase();
             // Limit to 10 characters
-            if (value.length > 10) {
-                value = value.substring(0, 10);
+            if (cleanValue.length > 10) {
+                cleanValue = cleanValue.substring(0, 10);
             }
-            $(this).val(value);
+            $(this).val(cleanValue);
         },
         
         /**
@@ -100,10 +104,12 @@ jQuery(document).ready(function($) {
             $warning.remove();
             
             // Sanitize input - remove non-numeric characters
-            value = value.replace(/[^\d]/g, '');
+            var cleanValue = value.split('').map(function(char) {
+                return /\d/.test(char) ? char : '';
+            }).join('');
             
             // Parse as integer
-            var numValue = parseInt(value, 10);
+            var numValue = parseInt(cleanValue, 10);
             
             // Validate range
             if (isNaN(numValue) || numValue < 1) {
@@ -153,22 +159,20 @@ jQuery(document).ready(function($) {
         
         /**
          * Validate the entire form and show errors if any
-         * @param {Object} $form - The jQuery form object
-         * @returns {boolean} - Whether the form is valid
+         * @returns Whether the form is valid
          */
-        validateForm: function($form) {
-            var self = this;
+        validateForm: function() {
             var errors = [];
             var isValid = true;
             
             // Validate individual form sections
-            isValid = self.validateProductSelection(errors) && isValid;
-            isValid = self.validateCouponCountForm(errors, isValid) && isValid;
-            isValid = self.validateCouponPrefix(errors, isValid) && isValid;
+            isValid = this.validateProductSelection(errors) && isValid;
+            isValid = this.validateCouponCountForm(errors, isValid) && isValid;
+            isValid = this.validateCouponPrefix(errors, isValid) && isValid;
             
             // Show errors if any
             if (errors.length > 0) {
-                self.showErrorMessage(errors.join('\n'));
+                this.showErrorMessage(errors.join('\n'));
             }
             
             return isValid;
@@ -176,8 +180,8 @@ jQuery(document).ready(function($) {
         
         /**
          * Validate product selection
-         * @param {Array} errors - Array to push error messages to
-         * @returns {boolean} - Whether product selection is valid
+         * @param errors - Array to push error messages to
+         * @returns Whether product selection is valid
          */
         validateProductSelection: function(errors) {
             var productIds = $('#product_id').val();
@@ -191,9 +195,9 @@ jQuery(document).ready(function($) {
         
         /**
          * Validate coupon count form field
-         * @param {Array} errors - Array to push error messages to
-         * @param {boolean} isValid - Current validation state
-         * @returns {boolean} - Whether coupon count is valid
+         * @param errors - Array to push error messages to
+         * @param isValid - Current validation state
+         * @returns Whether coupon count is valid
          */
         validateCouponCountForm: function(errors, isValid) {
             var couponCountInput = $('#number_of_coupons').val();
@@ -220,9 +224,9 @@ jQuery(document).ready(function($) {
         
         /**
          * Validate coupon prefix
-         * @param {Array} errors - Array to push error messages to
-         * @param {boolean} isValid - Current validation state
-         * @returns {boolean} - Whether coupon prefix is valid
+         * @param errors - Array to push error messages to
+         * @param isValid - Current validation state
+         * @returns Whether coupon prefix is valid
          */
         validateCouponPrefix: function(errors, isValid) {
             var prefix = $('#coupon_prefix').val();
@@ -251,25 +255,27 @@ jQuery(document).ready(function($) {
                 var value = $this.val();
                 
                 // Remove invalid characters and enforce length
-                value = value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
-                if (value.length > 10) {
-                    value = value.substring(0, 10);
+                var cleanValue = value.split('').map(function(char) {
+                    return /[A-Za-z0-9]/.test(char) ? char : '';
+                }).join('').toUpperCase();
+                if (cleanValue.length > 10) {
+                    cleanValue = cleanValue.substring(0, 10);
                 }
                 
-                $this.val(value);
+                $this.val(cleanValue);
             });
         },
         
         /**
          * Display error message to user
-         * @param {string} message - The error message to display
+         * @param message - The error message to display
          */
         showErrorMessage: function(message) {
             // Remove existing error messages
             $('.scg-error-message').remove();
             
             // Sanitize message by ensuring it's a string and limiting length
-            if (typeof message !== 'string') {
+            if (Object.prototype.toString.call(message) !== '[object String]') {
                 message = String(message);
             }
             message = message.substring(0, 500); // Limit message length
@@ -298,11 +304,11 @@ jQuery(document).ready(function($) {
         
         /**
          * Display success message to user
-         * @param {string} message - The success message to display
+         * @param message - The success message to display
          */
         showSuccessMessage: function(message) {
             // Sanitize message
-            if (typeof message !== 'string') {
+            if (Object.prototype.toString.call(message) !== '[object String]') {
                 message = String(message);
             }
             message = message.substring(0, 500); // Limit message length
@@ -335,4 +341,5 @@ jQuery(document).ready(function($) {
     // Remove loading state when page loads (in case of refresh)
     $('.scg-form').removeClass('loading');
     $('.button-primary').prop('disabled', false);
-});
+    });
+}
