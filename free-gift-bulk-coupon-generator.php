@@ -12,8 +12,6 @@
  * Text Domain: free-gift-bulk-coupon-generator
  * Domain Path: /languages
  */
- * Domain Path: /languages
- */
 
 // Prevent direct access
 if (!defined('ABSPATH')) {
