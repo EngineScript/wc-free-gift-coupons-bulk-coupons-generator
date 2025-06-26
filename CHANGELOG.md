@@ -1,5 +1,23 @@
 # Changelog for WC Free Gift Coupons Bulk Coupon Generator
 
+## 1.1.0 - June 25, 2025
+### Improvements & Fixes
+- **Text Domain Standardization**: Fixed WordPress textdomain to match plugin slug `WC-Free-Gift-Coupons-Bulk-Coupons-Generator`
+- **Internationalization Compliance**: Updated all translation functions and POT file to use consistent textdomain
+- **Code Quality**: Enhanced code documentation and inline comments for better maintainability
+- **WordPress Standards**: Improved compliance with WordPress coding standards and best practices
+- **Coupon Generation**: Restored full character set for coupon codes (all lowercase letters and digits)
+- **File Structure**: Renamed POT file to match WordPress naming conventions
+- **Security Enhancement**: Additional input validation and sanitization improvements
+- **Documentation**: Added comprehensive changelog.txt file for WordPress.org compatibility
+
+### Technical Changes
+- Updated load_plugin_textdomain() to use correct textdomain
+- Standardized all __(), esc_html__(), esc_attr_e() function calls
+- Enhanced PHPDoc comments and function documentation
+- Improved error logging and debug information
+- Added comprehensive version tracking across all project files
+
 ## 1.0.0 - June 17, 2025
 ### Initial Release
 - **Core Features**: WordPress plugin for generating bulk free gift coupons that work with Free Gift Coupons for WooCommerce

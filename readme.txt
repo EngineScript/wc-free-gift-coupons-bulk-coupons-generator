@@ -3,7 +3,7 @@ Contributors: enginescript
 Tags: woocommerce, coupons, bulk, free-gifts, gift-coupons
 Requires at least: 6.5
 Tested up to: 6.8
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 Requires PHP: 7.4
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -108,6 +108,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 == Changelog ==
 
+= 1.1.0 =
+* **Text Domain Standardization**: Fixed WordPress textdomain to match plugin slug for proper internationalization
+* **Internationalization Compliance**: Updated all translation functions and POT file to use consistent textdomain
+* **Code Quality**: Enhanced code documentation and inline comments for better maintainability  
+* **WordPress Standards**: Improved compliance with WordPress coding standards and best practices
+* **Coupon Generation**: Restored full character set for coupon codes (all lowercase letters and digits)
+* **File Structure**: Renamed POT file to match WordPress naming conventions
+* **Security Enhancement**: Additional input validation and sanitization improvements
+* **Documentation**: Added comprehensive changelog.txt file for WordPress.org compatibility
+* **Technical Improvements**: Updated load_plugin_textdomain(), standardized all translation function calls
+* **Developer Experience**: Enhanced PHPDoc comments and improved error logging
+
 = 1.0.0 =
 * **Initial Release**: Complete WordPress plugin based on original WooCommerce coupon snippet
 * **Security Features**: CSRF protection, input sanitization, output escaping, rate limiting
@@ -125,6 +137,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+Important update: Fixed WordPress textdomain for proper internationalization. Enhanced code quality and WordPress standards compliance.
 
 = 1.0.0 =
 Initial release - Secure bulk free gift coupon generator for WooCommerce with proper Free Gift Coupons plugin compatibility.
