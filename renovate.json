@@ -1,0 +1,22 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "labels": ["[Type] Maintenance"],
+  "packageRules": [
+    {
+      "depTypeList": ["devDependencies"],
+      "extends": ["schedule:daily"],
+      "groupName": "devDependencies"
+    },
+    {
+      "depTypeList": ["dependencies"],
+      "extends": ["schedule:daily"]
+    },
+    {
+      "depTypeList": ["require-dev"],
+      "extends": ["schedule:daily"],
+      "groupName": "require-dev"
+    }
+  ]
+}
