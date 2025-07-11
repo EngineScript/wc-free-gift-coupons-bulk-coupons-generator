@@ -10,7 +10,7 @@
 
 // Prevent direct access.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-	exit;
+    exit;
 }
 
 // Clean up any plugin options/settings if we had any.
