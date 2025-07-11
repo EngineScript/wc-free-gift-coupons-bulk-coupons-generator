@@ -108,7 +108,7 @@ class WooCommerceFreeGiftBulkCoupons {
 	 * Initialize admin functionality
 	 */
 	public function admin_init() {
-		// Handle form submission
+		// Handle form submission.
 		if ( isset( $_POST['scg_generate_coupons'] ) && isset( $_POST['scg_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['scg_nonce'] ) ), 'scg_generate_coupons_action' ) ) {
 			$this->handle_coupon_generation();
 		}
