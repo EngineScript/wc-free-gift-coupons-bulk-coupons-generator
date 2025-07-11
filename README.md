@@ -6,7 +6,7 @@
 [![PHP Compatible](https://img.shields.io/badge/PHP-7.4%2B-purple.svg?logo=php)](https://www.php.net/)
 
 ## Current Version
-[![Version](https://img.shields.io/badge/Version-1.1.0-orange.svg?logo=github)](https://github.com/EngineScript/WC-Free-Gift-Coupons-Bulk-Coupons-Generator/releases/latest/download/free-gift-bulk-coupon-generator-1.1.0.zip)
+[![Version](https://img.shields.io/badge/Version-1.2.0-orange.svg?logo=github)](https://github.com/EngineScript/WC-Free-Gift-Coupons-Bulk-Coupons-Generator/releases/latest/download/free-gift-bulk-coupon-generator-1.2.0.zip)
 
 A WordPress plugin for generating bulk free gift coupons that work specifically with the **Free Gift Coupons for WooCommerce** plugin. Creates coupons with the proper data structure required for free gift functionality.
 
