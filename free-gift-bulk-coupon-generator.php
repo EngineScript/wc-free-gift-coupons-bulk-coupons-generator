@@ -116,6 +116,8 @@ class WooCommerceFreeGiftBulkCoupons {
 
     /**
      * Enqueue admin scripts and styles
+     *
+     * @param string $hook The current admin page hook.
      */
     public function enqueue_admin_scripts( $hook ) {
         if ( 'woocommerce_page_free-gift-bulk-coupon-generator' !== $hook ) {
@@ -131,10 +133,14 @@ class WooCommerceFreeGiftBulkCoupons {
         wp_enqueue_script( 'scg-admin', SCG_PLUGIN_URL . 'assets/js/admin.js', array( 'jquery' ), SCG_PLUGIN_VERSION, true );
         wp_enqueue_style( 'scg-admin', SCG_PLUGIN_URL . 'assets/css/admin.css', array(), SCG_PLUGIN_VERSION );
 
-        wp_localize_script( 'scg-admin', 'scg_ajax', array(
-            'ajax_url' => admin_url( 'admin-ajax.php' ),
-            'nonce'    => wp_create_nonce( 'scg_ajax_nonce' ),
-        ) );
+        wp_localize_script(
+            'scg-admin',
+            'scg_ajax',
+            array(
+                'ajax_url' => admin_url( 'admin-ajax.php' ),
+                'nonce'    => wp_create_nonce( 'scg_ajax_nonce' ),
+            )
+        );
     }
 
     /**
