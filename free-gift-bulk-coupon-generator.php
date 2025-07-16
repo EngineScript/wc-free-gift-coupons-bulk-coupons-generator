@@ -160,11 +160,14 @@ class WooCommerceFreeGiftBulkCoupons {
         // Basic rate limiting - prevent multiple simultaneous requests.
         $transient_key = 'scg_generating_' . get_current_user_id();
         if ( get_transient( $transient_key ) ) {
-            add_action( 'admin_notices', function() {
-                echo '<div class="notice notice-error is-dismissible"><p>' .
-                     esc_html__( 'Coupon generation already in progress. Please wait before starting another batch.', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator' ) .
-                     '</p></div>';
-            } );
+            add_action(
+                'admin_notices',
+                function () {
+                    echo '<div class="notice notice-error is-dismissible"><p>' .
+                         esc_html__( 'Coupon generation already in progress. Please wait before starting another batch.', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator' ) .
+                         '</p></div>';
+                }
+            );
             return;
         }
 
@@ -172,15 +175,15 @@ class WooCommerceFreeGiftBulkCoupons {
         set_transient( $transient_key, true, 300 ); // 5 minutes
 
         // Sanitize and validate input with proper unslashing.
-        $product_ids        = isset( $_POST['product_id'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['product_id'] ) ) : array();
-        $number_of_coupons  = isset( $_POST['number_of_coupons'] ) ? absint( wp_unslash( $_POST['number_of_coupons'] ) ) : 0;
+        $product_ids         = isset( $_POST['product_id'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['product_id'] ) ) : array();
+        $number_of_coupons   = isset( $_POST['number_of_coupons'] ) ? absint( wp_unslash( $_POST['number_of_coupons'] ) ) : 0;
         $coupon_prefix       = isset( $_POST['coupon_prefix'] ) ? sanitize_text_field( wp_unslash( $_POST['coupon_prefix'] ) ) : '';
         $discount_type       = isset( $_POST['discount_type'] ) ? sanitize_text_field( wp_unslash( $_POST['discount_type'] ) ) : 'free_gift';
 
         // Validate discount type against allowed values.
         $allowed_discount_types = array( 'free_gift', 'percent', 'fixed_cart', 'fixed_product' );
         if ( ! in_array( $discount_type, $allowed_discount_types, true ) ) {
-            $discount_type = 'free_gift'; // Default to safe value
+            $discount_type = 'free_gift'; // Default to safe value.
         }
 
         // Validate and sanitize coupon prefix.
@@ -230,26 +233,37 @@ class WooCommerceFreeGiftBulkCoupons {
         delete_transient( $transient_key );
 
         if ( $generated_coupons > 0 ) {
-            add_action( 'admin_notices', function() use ( $generated_coupons ) {
-                echo '<div class="notice notice-success is-dismissible"><p>' .
-                     sprintf(
-                         /* translators: %d: Number of coupons generated */
-                         esc_html__( 'Successfully generated %d coupons.', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator' ),
-                         esc_html( $generated_coupons )
-                     ) .
-                     '</p></div>';
-            } );
+            add_action(
+                'admin_notices',
+                function () use ( $generated_coupons ) {
+                    echo '<div class="notice notice-success is-dismissible"><p>' .
+                         sprintf(
+                             /* translators: %d: Number of coupons generated */
+                             esc_html__( 'Successfully generated %d coupons.', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator' ),
+                             esc_html( $generated_coupons )
+                         ) .
+                         '</p></div>';
+                }
+            );
         } else {
-            add_action( 'admin_notices', function() {
-                echo '<div class="notice notice-error is-dismissible"><p>' .
-                     esc_html__( 'Failed to generate coupons. Please try again.', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator' ) .
-                     '</p></div>';
-            } );
+            add_action(
+                'admin_notices',
+                function () {
+                    echo '<div class="notice notice-error is-dismissible"><p>' .
+                         esc_html__( 'Failed to generate coupons. Please try again.', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator' ) .
+                         '</p></div>';
+                }
+            );
         }
     }
 
     /**
      * Generate coupons
+     *
+     * @param array  $product_ids      Array of product IDs to generate coupons for.
+     * @param int    $number_of_coupons Number of coupons to generate.
+     * @param string $prefix           Coupon prefix.
+     * @param string $discount_type    Type of discount.
      */
     private function generate_coupons( $product_ids, $number_of_coupons, $prefix = '', $discount_type = 'free_gift' ) {
         $valid_products = $this->validate_products( $product_ids );
@@ -258,7 +272,7 @@ class WooCommerceFreeGiftBulkCoupons {
         }
 
         $generation_params = $this->prepare_generation_params( $number_of_coupons, $prefix, $discount_type );
-        $gift_info        = $this->prepare_gift_info( $valid_products );
+        $gift_info         = $this->prepare_gift_info( $valid_products );
 
         // Fire before generation action.
         do_action( 'scg_before_coupon_generation', $product_ids, $generation_params['count'] );
@@ -285,7 +299,7 @@ class WooCommerceFreeGiftBulkCoupons {
         foreach ( $product_ids as $product_id ) {
             $product = wc_get_product( $product_id );
             if ( $product ) {
-                $valid_products[$product_id] = $product;
+                $valid_products[ $product_id ] = $product;
             }
         }
 
@@ -297,11 +311,11 @@ class WooCommerceFreeGiftBulkCoupons {
      */
     private function prepare_generation_params( $number_of_coupons, $prefix, $discount_type ) {
         return array(
-            'count'        => apply_filters( 'scg_max_coupons_per_batch', $number_of_coupons ),
-            'prefix'       => $prefix,
+            'count'         => apply_filters( 'scg_max_coupons_per_batch', $number_of_coupons ),
+            'prefix'        => $prefix,
             'discount_type' => $discount_type,
-            'expiry_days'  => apply_filters( 'scg_coupon_expiry_days', 365 ),
-            'max_attempts' => $number_of_coupons * 2,
+            'expiry_days'   => apply_filters( 'scg_coupon_expiry_days', 365 ),
+            'max_attempts'  => $number_of_coupons * 2,
         );
     }
 
@@ -312,10 +326,10 @@ class WooCommerceFreeGiftBulkCoupons {
         $gift_info = array();
         // Use array_keys to avoid unused variable warning.
         foreach ( array_keys( $valid_products ) as $product_id ) {
-            $gift_info[$product_id] = array(
-                'product_id'  => $product_id,
+            $gift_info[ $product_id ] = array(
+                'product_id'   => $product_id,
                 'variation_id' => 0,
-                'quantity'    => 1,
+                'quantity'     => 1,
             );
         }
         return $gift_info;
@@ -341,7 +355,7 @@ class WooCommerceFreeGiftBulkCoupons {
                 $generated_count++;
                 $this->handle_generation_delay( $i );
             } else {
-                $i--; // Try again with same counter
+                $i--; // Try again with same counter.
             }
         }
 
@@ -394,13 +408,15 @@ class WooCommerceFreeGiftBulkCoupons {
             $product_names[0];
 
         $coupon->set_code( $code );
-        $coupon->set_description( sprintf(
-            /* translators: 1: Product names, 2: Current batch number, 3: Total number of coupons */
-            __( 'Auto-generated coupon for %1$s (Batch %2$d/%3$d)', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator' ),
-            $products_text,
-            $current_number,
-            $params['count']
-        ) );
+        $coupon->set_description(
+            sprintf(
+                /* translators: 1: Product names, 2: Current batch number, 3: Total number of coupons */
+                __( 'Auto-generated coupon for %1$s (Batch %2$d/%3$d)', 'WC-Free-Gift-Coupons-Bulk-Coupons-Generator' ),
+                $products_text,
+                $current_number,
+                $params['count']
+            )
+        );
         $coupon->set_discount_type( $params['discount_type'] );
         $coupon->set_individual_use( true );
         $coupon->set_usage_limit( 1 );
@@ -412,7 +428,7 @@ class WooCommerceFreeGiftBulkCoupons {
      */
     private function set_coupon_metadata( $coupon, $gift_info, $params ) {
         // For free gift coupons, add the gift data.
-        if ( $params['discount_type'] === 'free_gift' ) {
+        if ( 'free_gift' === $params['discount_type'] ) {
             $coupon->update_meta_data( '_wc_free_gift_coupon_data', $gift_info );
         }
 
@@ -428,12 +444,12 @@ class WooCommerceFreeGiftBulkCoupons {
      * Implements micro-delays to prevent server overload during bulk generation.
      * Uses usleep() for precise timing control without blocking the entire process.
      *
-     * @param int $current_number Current coupon number in the batch
+     * @param int $current_number Current coupon number in the batch.
      */
     private function handle_generation_delay( $current_number ) {
         // Add small delay to prevent overwhelming the server.
-        if ( $current_number % 50 === 0 ) {
-            usleep( 100000 ); // 0.1 second delay every 50 coupons
+        if ( 0 === $current_number % 50 ) {
+            usleep( 100000 ); // 0.1 second delay every 50 coupons.
         }
     }
 
@@ -480,28 +496,28 @@ class WooCommerceFreeGiftBulkCoupons {
      */
     private function get_products_for_dropdown() {
         // Use transient caching for performance.
-        $cache_key     = 'scg_products_dropdown_' . wp_cache_get_last_changed( 'posts' );
+        $cache_key       = 'scg_products_dropdown_' . wp_cache_get_last_changed( 'posts' );
         $product_options = get_transient( $cache_key );
 
         if ( false === $product_options ) {
             $args = array(
-                'post_type'      => 'product',
-                'posts_per_page' => 1000, // Reasonable limit
-                'post_status'    => 'publish',
-                'orderby'        => 'title',
-                'order'          => 'ASC',
-                'no_found_rows'  => true, // Performance optimization
-                'update_post_meta_cache' => false, // Performance optimization
-                'update_post_term_cache' => false, // Performance optimization
+                'post_type'              => 'product',
+                'posts_per_page'         => 1000, // Reasonable limit.
+                'post_status'            => 'publish',
+                'orderby'                => 'title',
+                'order'                  => 'ASC',
+                'no_found_rows'          => true, // Performance optimization.
+                'update_post_meta_cache' => false, // Performance optimization.
+                'update_post_term_cache' => false, // Performance optimization.
             );
 
-            $products      = get_posts( $args );
+            $products        = get_posts( $args );
             $product_options = array();
 
             foreach ( $products as $product ) {
                 $product_obj = wc_get_product( $product->ID );
                 if ( $product_obj && $product_obj->is_purchasable() && $product_obj->is_visible() ) {
-                    $product_options[$product->ID] = esc_html( $product_obj->get_name() ) . ' (ID: ' . absint( $product->ID ) . ')';
+                    $product_options[ $product->ID ] = esc_html( $product_obj->get_name() ) . ' (ID: ' . absint( $product->ID ) . ')';
                 }
             }
 
@@ -571,7 +587,7 @@ class WooCommerceFreeGiftBulkCoupons {
             </th>
             <td>
                 <select name="product_id[]" id="product_id" class="regular-text" multiple="multiple" size="8" required>
-                    <?php foreach ( $products as $product_id => $product_name ): ?>
+                    <?php foreach ( $products as $product_id => $product_name ) : ?>
                         <option value="<?php echo esc_attr( $product_id ); ?>">
                             <?php echo esc_html( $product_name ); ?>
                         </option>
