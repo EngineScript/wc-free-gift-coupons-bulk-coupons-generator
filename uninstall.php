@@ -18,8 +18,31 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 delete_option( 'scg_plugin_version' );
 delete_option( 'scg_settings' );
 
+/**
+ * Deletes all transients with a specific prefix.
+ *
+ * @param string $prefix The prefix to search for.
+ */
+function scg_delete_transients_with_prefix( $prefix ) {
+    global $wpdb;
+
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+    $transients = $wpdb->get_col(
+        $wpdb->prepare(
+            "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s",
+            $wpdb->esc_like( '_transient_' . $prefix ) . '%'
+        )
+    );
+
+    foreach ( $transients as $transient ) {
+        // Remove the '_transient_' prefix to get the transient name.
+        $transient_name = str_replace( '_transient_', '', $transient );
+        delete_transient( $transient_name );
+    }
+}
+
 // Clean up any transients.
-delete_transient( 'scg_products_cache' );
+scg_delete_transients_with_prefix( 'scg_products_dropdown_' );
 
 // Note: We don't delete the generated coupons as they may still be in use.
 // Users should manually delete coupons if they want to remove them completely.

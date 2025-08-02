@@ -3,7 +3,7 @@ Contributors: enginescript
 Tags: woocommerce, coupons, bulk, free-gifts, gift-coupons
 Requires at least: 6.5
 Tested up to: 6.8
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 Requires PHP: 7.4
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -108,6 +108,22 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 == Changelog ==
 
+= 1.3.0 =
+* **Security Enhancement**: Replaced `wp_rand()` with `random_int()` for cryptographically secure coupon code generation.
+* **Security Enhancement**: Removed redundant nonce verification in `admin_init` to streamline security checks.
+* **Bug Fix**: Corrected the transient key in `uninstall.php` to ensure proper cleanup of cached data upon plugin removal.
+* **Code Refinement**: Removed unused `fgbcg_admin_menu()` function to improve code maintainability.
+
+= 1.2.0 =
+* **Security Enhancement**: Implemented comprehensive security audit and hardening.
+* **Security Enhancement**: Added `X-Content-Type-Options: nosniff` and `X-Frame-Options: SAMEORIGIN` headers.
+* **Security Enhancement**: Enhanced input sanitization and validation to prevent XSS and other injection attacks.
+* **Security Enhancement**: Implemented rate limiting to prevent abuse of the coupon generation feature.
+* **Bug Fix**: Resolved issue where coupon prefix was not properly sanitized.
+* **Bug Fix**: Fixed potential for invalid product IDs to be processed.
+* **Improvement**: Added caching for product dropdown to improve performance.
+* **Improvement**: Added more detailed error messages for failed coupon generation.
+
 = 1.1.0 =
 * **Text Domain Standardization**: Fixed WordPress textdomain to match plugin slug for proper internationalization
 * **Internationalization Compliance**: Updated all translation functions and POT file to use consistent textdomain
@@ -137,6 +153,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 == Upgrade Notice ==
+
+= 1.3.0 =
+This version includes important security enhancements and bug fixes. It is highly recommended to update for improved security and stability.
+
+= 1.2.0 =
+This version includes a comprehensive security audit and hardening. It is highly recommended to update for improved security.
 
 = 1.1.0 =
 Important update: Fixed WordPress textdomain for proper internationalization. Enhanced code quality and WordPress standards compliance.

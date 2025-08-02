@@ -3,7 +3,7 @@
  * Plugin Name: WC Free Gift Coupons Bulk Coupon Generator
  * Plugin URI: https://github.com/EngineScript/WC-Free-Gift-Coupons-Bulk-Coupons-Generator
  * Description: Generate bulk free gift coupon codes that work with the Free Gift Coupons for WooCommerce plugin. Creates coupons with the proper data structure for free gift functionality.
- * Version: 1.2.0
+ * Version: 1.3.0
  * Author: EngineScript
  * Requires at least: 6.5
  * Tested up to: 6.8
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Define plugin constants.
 define( 'SCG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'SCG_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-define( 'SCG_PLUGIN_VERSION', '1.2.0' );
+define( 'SCG_PLUGIN_VERSION', '1.3.0' );
 
 /**
  * Main plugin class
@@ -109,7 +109,7 @@ class WooCommerceFreeGiftBulkCoupons {
      */
     public function admin_init() {
         // Handle form submission.
-        if ( isset( $_POST['scg_generate_coupons'] ) && isset( $_POST['scg_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['scg_nonce'] ) ), 'scg_generate_coupons_action' ) ) {
+        if ( isset( $_POST['scg_generate_coupons'] ) ) {
             $this->handle_coupon_generation();
         }
     }
@@ -474,13 +474,13 @@ class WooCommerceFreeGiftBulkCoupons {
      * Generate unique coupon code
      */
     private function generate_coupon_code( $prefix = '' ) {
-        $code_length = 12;
-        // Use lowercase letters and digits for coupon codes.
+        $code_length   = 12;
         $characters    = 'abcdefghijklmnopqrstuvwxyz0123456789';
         $random_string = '';
+        $char_count    = strlen( $characters );
 
         for ( $i = 0; $i < $code_length; $i++ ) {
-            $random_string .= $characters[ wp_rand( 0, strlen( $characters ) - 1 ) ];
+            $random_string .= $characters[ random_int( 0, $char_count - 1 ) ];
         }
 
         // Add prefix if provided.
@@ -711,10 +711,3 @@ class WooCommerceFreeGiftBulkCoupons {
 
 // Initialize plugin.
 WooCommerceFreeGiftBulkCoupons::get_instance();
-
-/**
- * Helper function for testing - indicates plugin is loaded
- */
-function fgbcg_admin_menu() {
-    return true;
-}

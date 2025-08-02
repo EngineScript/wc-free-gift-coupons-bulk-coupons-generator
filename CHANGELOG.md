@@ -1,5 +1,31 @@
 # Changelog for WC Free Gift Coupons Bulk Coupon Generator
 
+## 1.3.0 - August 2, 2025
+### Security
+- **Secure Coupon Generation**: Replaced `wp_rand()` with the more secure `random_int()` for generating coupon codes, ensuring cryptographic-level randomness and reducing the risk of predictable codes.
+- **Streamlined Nonce Verification**: Removed a redundant nonce check in `admin_init` to simplify the security workflow, as the primary verification is already handled in `handle_coupon_generation`.
+
+### Bug Fixes
+- **Corrected Transient Removal**: Fixed a bug in `uninstall.php` where an incorrect transient key was used, preventing cached product data from being properly deleted upon plugin uninstallation.
+
+### Refactoring
+- **Code Cleanup**: Removed the unused `fgbcg_admin_menu()` function to improve code clarity and maintainability.
+
+## 1.2.0 - July 15, 2025
+### Security
+- **Comprehensive Security Audit**: Conducted a full security review and implemented hardening measures across the plugin to protect against common vulnerabilities.
+- **HTTP Security Headers**: Added `X-Content-Type-Options: nosniff` and `X-Frame-Options: SAMEORIGIN` headers to enhance protection against content sniffing and clickjacking attacks.
+- **Enhanced Input Sanitization**: Improved sanitization and validation of all user inputs to provide stronger defense against XSS and other injection-based threats.
+- **Rate Limiting**: Implemented a rate-limiting mechanism to prevent brute-force attacks and abuse of the coupon generation feature.
+
+### Bug Fixes
+- **Prefix Sanitization**: Resolved an issue where the coupon prefix was not being properly sanitized, closing a potential security gap.
+- **Invalid Product ID Handling**: Fixed a bug that could allow invalid product IDs to be processed, improving data integrity.
+
+### Improvements
+- **Performance Boost**: Added transient caching for the product dropdown, significantly improving performance on sites with many products.
+- **Error Messaging**: Implemented more descriptive error messages for failed coupon generation, making it easier to diagnose issues.
+
 ## 1.1.0 - June 25, 2025
 ### Improvements & Fixes
 - **Text Domain Standardization**: Fixed WordPress textdomain to match plugin slug `WC-Free-Gift-Coupons-Bulk-Coupons-Generator`
