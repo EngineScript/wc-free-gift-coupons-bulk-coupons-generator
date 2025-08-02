@@ -1,5 +1,20 @@
 # Changelog for WC Free Gift Coupons Bulk Coupon Generator
 
+## 1.4.0 - August 2, 2025
+### Breaking Changes
+- **Text Domain Standardization**: Changed text domain from `WC-Free-Gift-Coupons-Bulk-Coupons-Generator` to `wc-free-gift-coupons-bulk-coupons-generator` to comply with WordPress standards that require only lowercase letters, numbers, and hyphens.
+
+### Security
+- **Nonce Verification Fix**: Added proper nonce verification in the `admin_init` method to prevent unauthorized form processing and address WordPress.Security.NonceVerification.Missing warning.
+
+### Improvements
+- **Deprecated Function Removal**: Removed the deprecated `load_plugin_textdomain()` call as WordPress automatically handles plugin translations for plugins hosted on WordPress.org since version 4.6.
+- **Repository Links Update**: Updated all GitHub repository links to use lowercase format to match the renamed repository.
+- **Testing Support**: Added `wc_free_gift_bulk_coupons_is_loaded()` helper function to improve compatibility with testing frameworks and replace the removed test function.
+
+### Development
+- **Package References**: Updated all `@package` references to use the new lowercase text domain format.
+
 ## 1.3.0 - August 2, 2025
 ### Security
 - **Secure Coupon Generation**: Replaced `wp_rand()` with the more secure `random_int()` for generating coupon codes, ensuring cryptographic-level randomness and reducing the risk of predictable codes.

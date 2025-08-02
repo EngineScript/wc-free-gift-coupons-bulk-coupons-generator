@@ -5,7 +5,7 @@
  * This script runs when the plugin is deleted via WordPress admin.
  * It cleans up any data created by the plugin.
  *
- * @package WC-Free-Gift-Coupons-Bulk-Coupons-Generator
+ * @package wc-free-gift-coupons-bulk-coupons-generator
  */
 
 // Prevent direct access.

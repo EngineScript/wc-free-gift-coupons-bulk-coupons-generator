@@ -3,7 +3,7 @@ Contributors: enginescript
 Tags: woocommerce, coupons, bulk, free-gifts, gift-coupons
 Requires at least: 6.5
 Tested up to: 6.8
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 Requires PHP: 7.4
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -108,6 +108,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 == Changelog ==
 
+= 1.4.0 =
+* **BREAKING**: Fixed text domain to use only lowercase letters and hyphens as required by WordPress standards.
+* **Security Fix**: Added proper nonce verification in admin_init to prevent unauthorized form processing.
+* **Improvement**: Removed deprecated load_plugin_textdomain() call as WordPress automatically handles translations for plugins hosted on WordPress.org.
+* **Improvement**: Updated all repository links to use lowercase format.
+* **Testing**: Added helper function for plugin load testing to improve compatibility with testing frameworks.
+
 = 1.3.0 =
 * **Security Enhancement**: Replaced `wp_rand()` with `random_int()` for cryptographically secure coupon code generation.
 * **Security Enhancement**: Removed redundant nonce verification in `admin_init` to streamline security checks.
@@ -153,6 +160,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 == Upgrade Notice ==
+
+= 1.4.0 =
+IMPORTANT: This version includes breaking changes to the text domain and fixes critical security issues. Please update immediately. The text domain has been changed to comply with WordPress standards which may affect custom translations.
 
 = 1.3.0 =
 This version includes important security enhancements and bug fixes. It is highly recommended to update for improved security and stability.
