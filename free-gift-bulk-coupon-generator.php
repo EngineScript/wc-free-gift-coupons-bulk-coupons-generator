@@ -706,5 +706,14 @@ class WooCommerceFreeGiftBulkCoupons {
     }
 }
 
+/**
+ * Helper function to check if plugin is loaded
+ *
+ * @return bool
+ */
+function wc_free_gift_bulk_coupons_is_loaded() {
+    return class_exists( 'WooCommerceFreeGiftBulkCoupons' );
+}
+
 // Initialize plugin.
 WooCommerceFreeGiftBulkCoupons::get_instance();
