@@ -499,7 +499,7 @@ class WooCommerceFreeGiftBulkCoupons {
         if ( false === $product_options ) {
             $args = array(
                 'post_type'              => 'product',
-                'posts_per_page'         => 1000, // Reasonable limit.
+                'posts_per_page'         => 100, // Reasonable limit.
                 'post_status'            => 'publish',
                 'orderby'                => 'title',
                 'order'                  => 'ASC',
