@@ -1,6 +1,20 @@
-# Changelog for WC Free Gift Coupons Bulk Coupon Generator
+# Changelog
 
-## 1.4.0 - August 2, 2025
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Fixed
+- Fixed WordPress coding standards violations in function formatting
+- Fixed anonymous function spacing and indentation issues
+- Added missing parameter documentation for validate_products function
+- Added return type documentation for generate_coupons function
+- Improved code alignment and formatting consistency
+
+## [1.4.0] - 2025-01-15
 ### Breaking Changes
 - **Text Domain Standardization**: Changed text domain from `WC-Free-Gift-Coupons-Bulk-Coupons-Generator` to `wc-free-gift-coupons-bulk-coupons-generator` to comply with WordPress standards that require only lowercase letters, numbers, and hyphens.
 

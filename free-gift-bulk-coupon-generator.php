@@ -14,6 +14,10 @@
  * Domain Path: /languages
  *
  * @package wc-free-gift-coupons-bulk-coupons-generator
+ * 
+ * Note: This is the main plugin file and follows WordPress plugin naming conventions.
+ * The filename free-gift-bulk-coupon-generator.php is intentionally different from
+ * the class name to follow WordPress plugin standards.
  */
 
 // Prevent direct access.
@@ -172,12 +176,11 @@ class WooCommerceFreeGiftBulkCoupons {
         set_transient( $transient_key, true, 300 ); // 5 minutes
 
         // Sanitize and validate input with proper unslashing.
-        $product_ids         = isset( $_POST['product_id'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['product_id'] ) ) : array();
-        $number_of_coupons   = isset( $_POST['number_of_coupons'] ) ? absint( wp_unslash( $_POST['number_of_coupons'] ) ) : 0;
-        $coupon_prefix       = isset( $_POST['coupon_prefix'] ) ? sanitize_text_field( wp_unslash( $_POST['coupon_prefix'] ) ) : '';
-        $discount_type       = isset( $_POST['discount_type'] ) ? sanitize_text_field( wp_unslash( $_POST['discount_type'] ) ) : 'free_gift';
-
-        // Validate discount type against allowed values.
+        // Get form data and sanitize inputs.
+        $product_ids       = isset( $_POST['product_id'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['product_id'] ) ) : array();
+        $number_of_coupons = isset( $_POST['number_of_coupons'] ) ? absint( wp_unslash( $_POST['number_of_coupons'] ) ) : 0;
+        $coupon_prefix     = isset( $_POST['coupon_prefix'] ) ? sanitize_text_field( wp_unslash( $_POST['coupon_prefix'] ) ) : '';
+        $discount_type     = isset( $_POST['discount_type'] ) ? sanitize_text_field( wp_unslash( $_POST['discount_type'] ) ) : 'free_gift';        // Validate discount type against allowed values.
         $allowed_discount_types = array( 'free_gift', 'percent', 'fixed_cart', 'fixed_product' );
         if ( ! in_array( $discount_type, $allowed_discount_types, true ) ) {
             $discount_type = 'free_gift'; // Default to safe value.
@@ -194,32 +197,41 @@ class WooCommerceFreeGiftBulkCoupons {
 
         // Validate inputs.
         if ( empty( $product_ids ) || empty( $number_of_coupons ) ) {
-            add_action( 'admin_notices', function() {
-                echo '<div class="notice notice-error is-dismissible"><p>' .
-                     esc_html__( 'Please select at least one product and specify the number of coupons to generate.', 'wc-free-gift-coupons-bulk-coupons-generator' ) .
-                     '</p></div>';
-            } );
+            add_action(
+                'admin_notices',
+                function () {
+                    echo '<div class="notice notice-error is-dismissible"><p>' .
+                        esc_html__( 'Please select at least one product and specify the number of coupons to generate.', 'wc-free-gift-coupons-bulk-coupons-generator' ) .
+                        '</p></div>';
+                }
+            );
             return;
         }
 
         // Additional validation for product IDs.
         foreach ( $product_ids as $product_id ) {
             if ( $product_id <= 0 || $product_id > PHP_INT_MAX ) {
-                add_action( 'admin_notices', function() {
-                    echo '<div class="notice notice-error is-dismissible"><p>' .
-                         esc_html__( 'Invalid product selection. Please try again.', 'wc-free-gift-coupons-bulk-coupons-generator' ) .
-                         '</p></div>';
-                } );
+                add_action(
+                    'admin_notices',
+                    function () {
+                        echo '<div class="notice notice-error is-dismissible"><p>' .
+                            esc_html__( 'Invalid product selection. Please try again.', 'wc-free-gift-coupons-bulk-coupons-generator' ) .
+                            '</p></div>';
+                    }
+                );
                 return;
             }
         }
 
         if ( $number_of_coupons <= 0 || $number_of_coupons > 100 ) {
-            add_action( 'admin_notices', function() {
-                echo '<div class="notice notice-error is-dismissible"><p>' .
-                     esc_html__( 'Maximum number of coupons that can be generated at once is 100.', 'wc-free-gift-coupons-bulk-coupons-generator' ) .
-                     '</p></div>';
-            } );
+            add_action(
+                'admin_notices',
+                function () {
+                    echo '<div class="notice notice-error is-dismissible"><p>' .
+                        esc_html__( 'Maximum number of coupons that can be generated at once is 100.', 'wc-free-gift-coupons-bulk-coupons-generator' ) .
+                        '</p></div>';
+                }
+            );
             return;
         }
 
@@ -261,6 +273,7 @@ class WooCommerceFreeGiftBulkCoupons {
      * @param int    $number_of_coupons Number of coupons to generate.
      * @param string $prefix           Coupon prefix.
      * @param string $discount_type    Type of discount.
+     * @return int Number of coupons generated.
      */
     private function generate_coupons( $product_ids, $number_of_coupons, $prefix = '', $discount_type = 'free_gift' ) {
         $valid_products = $this->validate_products( $product_ids );
@@ -284,6 +297,9 @@ class WooCommerceFreeGiftBulkCoupons {
 
     /**
      * Validate products for coupon generation
+     *
+     * @param array|int $product_ids Product IDs to validate.
+     * @return array Array of valid product objects.
      */
     private function validate_products( $product_ids ) {
         // Ensure product_ids is an array.
