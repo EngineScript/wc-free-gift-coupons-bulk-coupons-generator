@@ -14,7 +14,7 @@
  * Domain Path: /languages
  *
  * @package wc-free-gift-coupons-bulk-coupons-generator
- * 
+ *
  * Note: This is the main plugin file and follows WordPress plugin naming conventions.
  * The filename free-gift-bulk-coupon-generator.php is intentionally different from
  * the class name to follow WordPress plugin standards.
@@ -180,7 +180,9 @@ class WooCommerceFreeGiftBulkCoupons {
         $product_ids       = isset( $_POST['product_id'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['product_id'] ) ) : array();
         $number_of_coupons = isset( $_POST['number_of_coupons'] ) ? absint( wp_unslash( $_POST['number_of_coupons'] ) ) : 0;
         $coupon_prefix     = isset( $_POST['coupon_prefix'] ) ? sanitize_text_field( wp_unslash( $_POST['coupon_prefix'] ) ) : '';
-        $discount_type     = isset( $_POST['discount_type'] ) ? sanitize_text_field( wp_unslash( $_POST['discount_type'] ) ) : 'free_gift';        // Validate discount type against allowed values.
+        $discount_type     = isset( $_POST['discount_type'] ) ? sanitize_text_field( wp_unslash( $_POST['discount_type'] ) ) : 'free_gift';
+        
+        // Validate discount type against allowed values.
         $allowed_discount_types = array( 'free_gift', 'percent', 'fixed_cart', 'fixed_product' );
         if ( ! in_array( $discount_type, $allowed_discount_types, true ) ) {
             $discount_type = 'free_gift'; // Default to safe value.
@@ -246,11 +248,11 @@ class WooCommerceFreeGiftBulkCoupons {
                 'admin_notices',
                 function () use ( $generated_coupons ) {
                     echo '<div class="notice notice-success is-dismissible"><p>' .
-                         sprintf(
-                             /* translators: %d: Number of coupons generated */
-                             esc_html__( 'Successfully generated %d coupons.', 'wc-free-gift-coupons-bulk-coupons-generator' ),
-                             esc_html( $generated_coupons )
-                         ) .
+                        sprintf(
+                            /* translators: %d: Number of coupons generated */
+                            esc_html__( 'Successfully generated %d coupons.', 'wc-free-gift-coupons-bulk-coupons-generator' ),
+                            esc_html( $generated_coupons )
+                        ) .
                          '</p></div>';
                 }
             );
@@ -321,6 +323,11 @@ class WooCommerceFreeGiftBulkCoupons {
 
     /**
      * Prepare generation parameters
+     *
+     * @param int    $number_of_coupons Number of coupons to generate.
+     * @param string $prefix           Coupon prefix.
+     * @param string $discount_type    Type of discount.
+     * @return array Generation parameters array.
      */
     private function prepare_generation_params( $number_of_coupons, $prefix, $discount_type ) {
         return array(
@@ -334,6 +341,9 @@ class WooCommerceFreeGiftBulkCoupons {
 
     /**
      * Prepare gift information for coupons
+     *
+     * @param array $valid_products Array of valid product objects.
+     * @return array Gift information array.
      */
     private function prepare_gift_info( $valid_products ) {
         $gift_info = array();
@@ -350,6 +360,11 @@ class WooCommerceFreeGiftBulkCoupons {
 
     /**
      * Execute the coupon generation process
+     *
+     * @param array $valid_products Array of valid product objects.
+     * @param array $gift_info      Gift information array.
+     * @param array $params         Generation parameters.
+     * @return int Number of coupons generated.
      */
     private function execute_coupon_generation( $valid_products, $gift_info, $params ) {
         $generated_count = 0;
@@ -377,6 +392,12 @@ class WooCommerceFreeGiftBulkCoupons {
 
     /**
      * Create a single coupon
+     *
+     * @param array $valid_products Array of valid product objects.
+     * @param array $gift_info      Gift information array.
+     * @param array $params         Generation parameters.
+     * @param int   $current_number Current coupon number in batch.
+     * @return bool True if coupon was created successfully, false otherwise.
      */
     private function create_single_coupon( $valid_products, $gift_info, $params, $current_number ) {
         try {
@@ -409,6 +430,12 @@ class WooCommerceFreeGiftBulkCoupons {
 
     /**
      * Set coupon properties
+     *
+     * @param WC_Coupon $coupon         The coupon object.
+     * @param string    $code           The coupon code.
+     * @param array     $valid_products Array of valid product objects.
+     * @param array     $params         Generation parameters.
+     * @param int       $current_number Current coupon number in batch.
      */
     private function set_coupon_properties( $coupon, $code, $valid_products, $params, $current_number ) {
         // Create product names list for description.
@@ -438,6 +465,10 @@ class WooCommerceFreeGiftBulkCoupons {
 
     /**
      * Set coupon metadata
+     *
+     * @param WC_Coupon $coupon    The coupon object.
+     * @param array     $gift_info Gift information array.
+     * @param array     $params    Generation parameters.
      */
     private function set_coupon_metadata( $coupon, $gift_info, $params ) {
         // For free gift coupons, add the gift data.
@@ -468,6 +499,8 @@ class WooCommerceFreeGiftBulkCoupons {
 
     /**
      * Log coupon generation errors
+     *
+     * @param Exception $exception The exception that occurred.
      */
     private function log_coupon_error( $exception ) {
         // Only log in debug mode.
@@ -485,6 +518,9 @@ class WooCommerceFreeGiftBulkCoupons {
 
     /**
      * Generate unique coupon code
+     *
+     * @param string $prefix Optional prefix for the coupon code.
+     * @return string Generated coupon code.
      */
     private function generate_coupon_code( $prefix = '' ) {
         $code_length   = 12;
@@ -506,6 +542,8 @@ class WooCommerceFreeGiftBulkCoupons {
 
     /**
      * Get products for dropdown
+     *
+     * @return array Array of product options for dropdown.
      */
     private function get_products_for_dropdown() {
         // Use transient caching for performance.
@@ -568,6 +606,8 @@ class WooCommerceFreeGiftBulkCoupons {
 
     /**
      * Render admin form
+     *
+     * @param array $products Array of products for the dropdown.
      */
     private function render_admin_form( $products ) {
         ?>
@@ -591,6 +631,8 @@ class WooCommerceFreeGiftBulkCoupons {
 
     /**
      * Render product selection field
+     *
+     * @param array $products Array of products for the dropdown.
      */
     private function render_product_selection_field( $products ) {
         ?>

@@ -114,6 +114,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 * **Improvement**: Removed deprecated load_plugin_textdomain() call as WordPress automatically handles translations for plugins hosted on WordPress.org.
 * **Improvement**: Updated all repository links to use lowercase format.
 * **Testing**: Added helper function for plugin load testing to improve compatibility with testing frameworks.
+* **Code Style and Documentation**: Addressed multiple code style issues, including whitespace, alignment, and indentation, to improve readability and maintainability.
+* **PHPDoc Blocks**: Added comprehensive PHPDoc blocks to all functions, ensuring all parameters and return values are clearly documented.
 
 = 1.3.0 =
 * **Security Enhancement**: Replaced `wp_rand()` with `random_int()` for cryptographically secure coupon code generation.
