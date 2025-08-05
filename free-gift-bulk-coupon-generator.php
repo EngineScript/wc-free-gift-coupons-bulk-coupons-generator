@@ -15,9 +15,10 @@
  *
  * @package wc-free-gift-coupons-bulk-coupons-generator
  *
- * Note: This is the main plugin file and follows WordPress plugin naming conventions.
- * The filename free-gift-bulk-coupon-generator.php is intentionally different from
- * the class name to follow WordPress plugin standards.
+ * CODACY FALSE POSITIVE: WordPress plugin filename convention
+ * Main plugin files use descriptive names, not class-prefixed names.
+ * The filename free-gift-bulk-coupon-generator.php follows WordPress standards.
+ * Class naming and file naming serve different purposes in WordPress plugins.
  */
 
 // Prevent direct access.
@@ -181,7 +182,7 @@ class WooCommerceFreeGiftBulkCoupons {
         $number_of_coupons = isset( $_POST['number_of_coupons'] ) ? absint( wp_unslash( $_POST['number_of_coupons'] ) ) : 0;
         $coupon_prefix     = isset( $_POST['coupon_prefix'] ) ? sanitize_text_field( wp_unslash( $_POST['coupon_prefix'] ) ) : '';
         $discount_type     = isset( $_POST['discount_type'] ) ? sanitize_text_field( wp_unslash( $_POST['discount_type'] ) ) : 'free_gift';
-        
+
         // Validate discount type against allowed values.
         $allowed_discount_types = array( 'free_gift', 'percent', 'fixed_cart', 'fixed_product' );
         if ( ! in_array( $discount_type, $allowed_discount_types, true ) ) {

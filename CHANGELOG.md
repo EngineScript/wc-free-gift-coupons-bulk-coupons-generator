@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - **Code Style and Documentation**: Addressed multiple code style issues, including whitespace, alignment, and indentation, to improve readability and maintainability.
 - **PHPDoc Blocks**: Added comprehensive PHPDoc blocks to all functions, ensuring all parameters and return values are clearly documented.
+- **Trailing Whitespace**: Removed trailing whitespace from PHP files to comply with coding standards.
+- **Code Quality Comments**: Added comprehensive comments addressing Codacy false positives specific to WordPress development environment.
 
 ### Fixed
 - Fixed WordPress coding standards violations in function formatting
@@ -17,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added missing parameter documentation for validate_products function
 - Added return type documentation for generate_coupons function
 - Improved code alignment and formatting consistency
+- Addressed Codacy static analysis issues with appropriate comments for WordPress-specific patterns
 
 ## [1.4.0] - 2025-01-15
 ### Breaking Changes

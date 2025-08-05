@@ -116,6 +116,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 * **Testing**: Added helper function for plugin load testing to improve compatibility with testing frameworks.
 * **Code Style and Documentation**: Addressed multiple code style issues, including whitespace, alignment, and indentation, to improve readability and maintainability.
 * **PHPDoc Blocks**: Added comprehensive PHPDoc blocks to all functions, ensuring all parameters and return values are clearly documented.
+* **Trailing Whitespace**: Removed trailing whitespace from PHP files to comply with coding standards.
+* **Code Quality Comments**: Added comprehensive comments addressing Codacy false positives specific to WordPress development environment.
 
 = 1.3.0 =
 * **Security Enhancement**: Replaced `wp_rand()` with `random_int()` for cryptographically secure coupon code generation.
