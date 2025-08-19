@@ -114,6 +114,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 * **Improvement**: Removed deprecated load_plugin_textdomain() call as WordPress automatically handles translations for plugins hosted on WordPress.org.
 * **Improvement**: Updated all repository links to use lowercase format.
 * **Testing**: Added helper function for plugin load testing to improve compatibility with testing frameworks.
+* **Plugin Initialization**: Fixed plugin load order by moving initialization to `plugins_loaded` hook instead of immediate global scope execution. This prevents potential conflicts with WooCommerce and ensures all dependencies are properly loaded before initialization.
 * **Code Style and Documentation**: Addressed multiple code style issues, including whitespace, alignment, and indentation, to improve readability and maintainability.
 * **PHPDoc Blocks**: Added comprehensive PHPDoc blocks to all functions, ensuring all parameters and return values are clearly documented.
 * **Trailing Whitespace**: Removed trailing whitespace from PHP files to comply with coding standards.

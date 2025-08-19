@@ -59,7 +59,8 @@ class WooCommerceFreeGiftBulkCoupons {
      * Constructor
      */
     private function __construct() {
-        add_action( 'plugins_loaded', array( $this, 'init' ) );
+        // Initialize the plugin immediately since plugins_loaded has already fired
+        $this->init();
     }
 
     /**
@@ -774,5 +775,13 @@ function wc_free_gift_bulk_coupons_is_loaded() {
     return class_exists( 'WooCommerceFreeGiftBulkCoupons' );
 }
 
-// Initialize plugin.
-WooCommerceFreeGiftBulkCoupons::get_instance();
+/**
+ * Initialize the plugin after all plugins are loaded.
+ * This ensures proper load order and prevents conflicts with dependencies like WooCommerce.
+ */
+function wc_free_gift_bulk_coupons_init() {
+    WooCommerceFreeGiftBulkCoupons::get_instance();
+}
+
+// Hook plugin initialization to plugins_loaded to ensure proper load order.
+add_action( 'plugins_loaded', 'wc_free_gift_bulk_coupons_init' );
