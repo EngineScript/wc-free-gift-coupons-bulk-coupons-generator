@@ -217,7 +217,7 @@ jobs:
             - \`@gemini-cli optimize bulk generation\` - Performance improvements for large coupon batches
             - \`@gemini-cli woocommerce integration\` - WooCommerce API usage and best practices
             
-            > 🔄 **Note:** This is an AI-generated response for WC Free Gift Coupons Bulk Coupon Generator v1.4.0. Please review suggestions carefully and test thoroughly with WooCommerce.
+            > 🔄 **Note:** This is an AI-generated response for WC Free Gift Coupons Bulk Coupon Generator (latest version). Please review suggestions carefully and test thoroughly with WooCommerce.
             
             **Analysis Date:** ${new Date().toISOString()}
             `;

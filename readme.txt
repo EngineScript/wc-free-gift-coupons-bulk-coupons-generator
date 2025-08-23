@@ -3,7 +3,7 @@ Contributors: enginescript
 Tags: woocommerce, coupons, bulk, free-gifts, gift-coupons
 Requires at least: 6.5
 Tested up to: 6.8
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 Requires PHP: 7.4
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -108,16 +108,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 == Changelog ==
 
+= 1.5.0 =
+* **Plugin Initialization**: Fixed plugin load order by moving initialization to `plugins_loaded` hook instead of immediate global scope execution. This prevents potential conflicts with WooCommerce and ensures all dependencies are properly loaded before initialization.
+* **PHPStan Compatibility**: Fixed PHPStan errors including type casting for `esc_html()` and added proper annotations for WooCommerce class types.
+* **Code Style and Documentation**: Addressed multiple code style issues, including whitespace, alignment, and indentation, to improve readability and maintainability.
+* **PHPDoc Blocks**: Added comprehensive PHPDoc blocks to all functions, ensuring all parameters and return values are clearly documented.
+* **Trailing Whitespace**: Removed trailing whitespace from PHP files to comply with coding standards.
+* **Code Quality Comments**: Added comprehensive comments addressing Codacy false positives specific to WordPress development environment.
+
 = 1.4.0 =
 * **BREAKING**: Fixed text domain to use only lowercase letters and hyphens as required by WordPress standards.
 * **Security Fix**: Added proper nonce verification in admin_init to prevent unauthorized form processing.
 * **Improvement**: Removed deprecated load_plugin_textdomain() call as WordPress automatically handles translations for plugins hosted on WordPress.org.
 * **Improvement**: Updated all repository links to use lowercase format.
 * **Testing**: Added helper function for plugin load testing to improve compatibility with testing frameworks.
-* **Plugin Initialization**: Fixed plugin load order by moving initialization to `plugins_loaded` hook instead of immediate global scope execution. This prevents potential conflicts with WooCommerce and ensures all dependencies are properly loaded before initialization.
-* **Code Style and Documentation**: Addressed multiple code style issues, including whitespace, alignment, and indentation, to improve readability and maintainability.
-* **PHPDoc Blocks**: Added comprehensive PHPDoc blocks to all functions, ensuring all parameters and return values are clearly documented.
-* **Trailing Whitespace**: Removed trailing whitespace from PHP files to comply with coding standards.
 * **Code Quality Comments**: Added comprehensive comments addressing Codacy false positives specific to WordPress development environment.
 
 = 1.3.0 =

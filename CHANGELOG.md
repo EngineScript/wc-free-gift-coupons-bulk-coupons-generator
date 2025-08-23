@@ -7,14 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2025-08-23
 ### Fixed
 - **Plugin Initialization**: Fixed plugin load order by moving initialization to `plugins_loaded` hook instead of immediate global scope execution. This prevents potential conflicts with WooCommerce and ensures all dependencies are properly loaded before initialization.
+- **PHPStan Compatibility**: Fixed PHPStan errors including type casting for `esc_html()` and added proper annotations for WooCommerce class types.
 - **Code Style and Documentation**: Addressed multiple code style issues, including whitespace, alignment, and indentation, to improve readability and maintainability.
 - **PHPDoc Blocks**: Added comprehensive PHPDoc blocks to all functions, ensuring all parameters and return values are clearly documented.
 - **Trailing Whitespace**: Removed trailing whitespace from PHP files to comply with coding standards.
 - **Code Quality Comments**: Added comprehensive comments addressing Codacy false positives specific to WordPress development environment.
 
-### Fixed
+### Improved
 - Fixed WordPress coding standards violations in function formatting
 - Fixed anonymous function spacing and indentation issues
 - Added missing parameter documentation for validate_products function
