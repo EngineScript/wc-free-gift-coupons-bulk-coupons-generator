@@ -10,7 +10,7 @@
 
 // Prevent direct access.
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-    exit;
+	exit;
 }
 
 // Clean up any plugin options/settings if we had any.
@@ -24,21 +24,21 @@ delete_option( 'scg_settings' );
  * @param string $prefix The prefix to search for.
  */
 function scg_delete_transients_with_prefix( $prefix ) {
-    global $wpdb;
+	global $wpdb;
 
-    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-    $transients = $wpdb->get_col(
-        $wpdb->prepare(
-            "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s",
-            $wpdb->esc_like( '_transient_' . $prefix ) . '%'
-        )
-    );
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+	$transients = $wpdb->get_col(
+		$wpdb->prepare(
+			"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s",
+			$wpdb->esc_like( '_transient_' . $prefix ) . '%'
+		)
+	);
 
-    foreach ( $transients as $transient ) {
-        // Remove the '_transient_' prefix to get the transient name.
-        $transient_name = str_replace( '_transient_', '', $transient );
-        delete_transient( $transient_name );
-    }
+	foreach ( $transients as $transient ) {
+		// Remove the '_transient_' prefix to get the transient name.
+		$transient_name = str_replace( '_transient_', '', $transient );
+		delete_transient( $transient_name );
+	}
 }
 
 // Clean up any transients.
