@@ -783,7 +783,14 @@ jobs:
                   $this->assertTrue(defined('SCG_PLUGIN_VERSION'), 'Plugin version constant should be defined');
                   $this->assertTrue(defined('SCG_PLUGIN_URL'), 'Plugin URL constant should be defined');
                   $this->assertTrue(defined('SCG_PLUGIN_PATH'), 'Plugin path constant should be defined');
-                  $this->assertEquals('1.4.0', SCG_PLUGIN_VERSION, 'Plugin version should match expected version');
+                  
+                  // Extract version from plugin header dynamically to test against latest commit
+                  $plugin_file = dirname( dirname( __FILE__ ) ) . '/free-gift-bulk-coupon-generator.php';
+                  $plugin_data = get_file_data( $plugin_file, array( 'Version' => 'Version' ) );
+                  $expected_version = $plugin_data['Version'];
+                  
+                  $this->assertNotEmpty($expected_version, 'Plugin header should contain version');
+                  $this->assertEquals($expected_version, SCG_PLUGIN_VERSION, 'Plugin version constant should match header version in latest commit');
               }
               
               public function test_plugin_instance() {
