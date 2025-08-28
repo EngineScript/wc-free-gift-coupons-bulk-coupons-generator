@@ -253,7 +253,7 @@ class WooCommerceFreeGiftBulkCoupons {
 						sprintf(
 							/* translators: %d: Number of coupons generated */
 							esc_html__( 'Successfully generated %d coupons.', 'wc-free-gift-coupons-bulk-coupons-generator' ),
-							esc_html( $generated_coupons )
+							esc_html( (string) $generated_coupons )
 						) .
 						 '</p></div>';
 				}
