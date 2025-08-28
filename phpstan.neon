@@ -25,3 +25,6 @@ parameters:
         - '#Call to method .* on an unknown class WC_Coupon#'
         - '#Method .* of an unknown class WC_Coupon#'
         - '#Parameter .* of method .* expects WC_Product#'
+        - '#Parameter .* of method .* has invalid type WC_Coupon#'
+        - '#Class WC_Coupon not found#'
+        - '#Parameter \$coupon of method .* has invalid type WC_Coupon#'

@@ -570,7 +570,7 @@ class WooCommerceFreeGiftBulkCoupons {
 			foreach ( $products as $product ) {
 				$product_obj = wc_get_product( $product->ID );
 				if ( $product_obj && $product_obj->is_purchasable() && $product_obj->is_visible() ) {
-					$product_options[ $product->ID ] = esc_html( $product_obj->get_name() ) . ' (ID: ' . absint( $product->ID ) . ')';
+					$product_options[ $product->ID ] = esc_html( $product_obj->get_name() ) . ' (ID: ' . esc_html( (string) $product->ID ) . ')';
 				}
 			}
 
