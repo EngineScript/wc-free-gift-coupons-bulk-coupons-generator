@@ -21,9 +21,11 @@ delete_option( 'scg_settings' );
 /**
  * Deletes all transients with a specific prefix.
  *
+ * Namespaced to avoid collisions — only runs during uninstall.
+ *
  * @param string $prefix The prefix to search for.
  */
-function scg_delete_transients_with_prefix( $prefix ) {
+function wc_fgbcg_delete_transients_with_prefix( $prefix ) {
 	global $wpdb;
 
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
@@ -42,7 +44,7 @@ function scg_delete_transients_with_prefix( $prefix ) {
 }
 
 // Clean up any transients.
-scg_delete_transients_with_prefix( 'scg_products_dropdown_' );
+wc_fgbcg_delete_transients_with_prefix( 'scg_products_dropdown_' );
 
 // Note: We don't delete the generated coupons as they may still be in use.
 // Users should manually delete coupons if they want to remove them completely.

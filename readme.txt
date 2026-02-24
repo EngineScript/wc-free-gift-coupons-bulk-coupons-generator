@@ -3,7 +3,7 @@ Contributors: enginescript
 Tags: woocommerce, coupons, bulk, free-gifts, gift-coupons
 Requires at least: 6.5
 Tested up to: 6.9
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 Requires PHP: 7.4
 License: GPL v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -67,7 +67,7 @@ Yes! You can add a custom prefix to all generated coupon codes. For example, usi
 
 = Are the generated coupons secure? =
 
-Absolutely. Each coupon code is generated using WordPress's cryptographically secure wp_generate_password() function, ensuring codes are unpredictable and unique.
+Absolutely. Each coupon code is generated using PHP's cryptographically secure `random_int()` function, ensuring codes are unpredictable and unique.
 
 = Can I restrict coupons to specific products? =
 
@@ -107,6 +107,15 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 == Changelog ==
+
+= 1.5.1 =
+* **Double-Escaping Fix**: Fixed product names being double-escaped in the dropdown and success notices.
+* **Rate Limiting Fix**: Validation errors no longer lock users out for 5 minutes.
+* **Naming Collision Protection**: Added constant definition guards and renamed uninstall helper function.
+* **Implemented Filter**: The `scg_coupon_code_length` filter now works as documented.
+* **Code Cleanup**: Removed dead AJAX localization code, misplaced security headers, and redundant nonce check.
+* **Version Sync**: Synchronized version numbers across all project files.
+* **FAQ Fix**: Corrected inaccurate reference to `wp_generate_password()` in FAQ.
 
 = 1.5.0 =
 * **Plugin Initialization**: Fixed plugin load order by moving initialization to `plugins_loaded` hook instead of immediate global scope execution. This prevents potential conflicts with WooCommerce and ensures all dependencies are properly loaded before initialization.

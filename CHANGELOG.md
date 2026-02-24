@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.1] - 2026-02-23
+### Fixed
+- **Double-Escaping in Product Dropdown**: Removed premature `esc_html()` calls in `get_products_for_dropdown()` that caused double-escaping when rendered. Escaping now occurs only at render time in `render_product_selection_field()`.
+- **Double-Escaping in Success Notice**: Removed redundant `esc_html()` wrapping an integer inside an already-escaped `esc_html__()` format string in the coupon generation success message.
+- **Redundant Nonce Verification**: Removed duplicate nonce check in `admin_init()` — the nonce is properly verified once inside `handle_coupon_generation()`.
+- **Rate Limiting Transient Leak**: All early-return validation paths in `handle_coupon_generation()` now clear the rate-limiting transient, preventing users from being locked out for 5 minutes after a validation error.
+- **FAQ Inaccuracy**: Corrected readme.txt FAQ to reference `random_int()` instead of the incorrect `wp_generate_password()`.
+- **Version Mismatch**: Synchronized version numbers across README.md, GEMINI.md, readme.txt, and plugin header.
+
+### Improved
+- **Naming Collision Protection**: Added `defined()` guards around `SCG_PLUGIN_URL`, `SCG_PLUGIN_PATH`, and `SCG_PLUGIN_VERSION` constants to prevent fatal errors. Renamed uninstall helper `scg_delete_transients_with_prefix()` to `wc_fgbcg_delete_transients_with_prefix()` for namespace safety.
+- **Implemented `scg_coupon_code_length` Filter**: The documented filter now actually works, with sane bounds enforcement (8–32 characters).
+- **Removed Dead Code**: Removed unused `wp_localize_script()` AJAX data that had no corresponding AJAX handler.
+- **Removed Misplaced Security Headers**: Removed HTTP header injection from `admin_enqueue_scripts` hook where headers are typically already sent. WordPress already provides these protections via its admin framework.
+- **Cleaned Up Redundant Comments**: Simplified inline comment noise on sanitization lines.
+
 ## [1.5.0] - 2025-08-23
 ### Fixed
 - **Plugin Initialization**: Fixed plugin load order by moving initialization to `plugins_loaded` hook instead of immediate global scope execution. This prevents potential conflicts with WooCommerce and ensures all dependencies are properly loaded before initialization.

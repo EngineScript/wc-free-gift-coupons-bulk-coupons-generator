@@ -7,7 +7,7 @@ This is a WordPress plugin that generates bulk free gift coupon codes for WooCom
 ## Plugin Details
 
 - **Name:** WC Free Gift Coupons Bulk Coupon Generator
-- **Version:** 1.4.0
+- **Version:** 1.5.1
 - **WordPress Compatibility:** 6.5+
 - **PHP Compatibility:** 7.4+
 - **WooCommerce Compatibility:** 5.0+

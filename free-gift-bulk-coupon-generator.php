@@ -3,7 +3,7 @@
  * Plugin Name: WC Free Gift Coupons Bulk Coupon Generator
  * Plugin URI: https://github.com/EngineScript/wc-free-gift-coupons-bulk-coupons-generator
  * Description: Generate bulk free gift coupon codes that work with the Free Gift Coupons for WooCommerce plugin. Creates coupons with the proper data structure for free gift functionality.
- * Version: 1.5.0
+ * Version: 1.5.1
  * Author: EngineScript
  * Requires at least: 6.5
  * Tested up to: 6.9
@@ -26,10 +26,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// Define plugin constants.
-define( 'SCG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
-define( 'SCG_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-define( 'SCG_PLUGIN_VERSION', '1.5.0' );
+// Define plugin constants with existence checks to prevent fatal errors on reactivation.
+if ( ! defined( 'SCG_PLUGIN_URL' ) ) {
+	define( 'SCG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+}
+if ( ! defined( 'SCG_PLUGIN_PATH' ) ) {
+	define( 'SCG_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+}
+if ( ! defined( 'SCG_PLUGIN_VERSION' ) ) {
+	define( 'SCG_PLUGIN_VERSION', '1.5.1' );
+}
 
 /**
  * Main plugin class
@@ -111,8 +117,8 @@ class WooCommerceFreeGiftBulkCoupons {
 	 * Initialize admin functionality
 	 */
 	public function admin_init() {
-		// Handle form submission.
-		if ( isset( $_POST['scg_generate_coupons'] ) && isset( $_POST['scg_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['scg_nonce'] ) ), 'scg_generate_coupons_action' ) ) {
+		// Handle form submission — nonce verified inside handle_coupon_generation().
+		if ( isset( $_POST['scg_generate_coupons'] ) ) {
 			$this->handle_coupon_generation();
 		}
 	}
@@ -127,23 +133,8 @@ class WooCommerceFreeGiftBulkCoupons {
 			return;
 		}
 
-		// Add security headers.
-		if ( ! headers_sent() ) {
-			header( 'X-Content-Type-Options: nosniff' );
-			header( 'X-Frame-Options: SAMEORIGIN' );
-		}
-
 		wp_enqueue_script( 'scg-admin', SCG_PLUGIN_URL . 'assets/js/admin.js', array( 'jquery' ), SCG_PLUGIN_VERSION, true );
 		wp_enqueue_style( 'scg-admin', SCG_PLUGIN_URL . 'assets/css/admin.css', array(), SCG_PLUGIN_VERSION );
-
-		wp_localize_script(
-			'scg-admin',
-			'scg_ajax',
-			array(
-				'ajax_url' => admin_url( 'admin-ajax.php' ),
-				'nonce'    => wp_create_nonce( 'scg_ajax_nonce' ),
-			)
-		);
 	}
 
 	/**
@@ -177,10 +168,9 @@ class WooCommerceFreeGiftBulkCoupons {
 		// Set transient to prevent concurrent requests.
 		set_transient( $transient_key, true, 300 ); // 5 minutes
 
-		// Sanitize and validate input with proper unslashing.
-		// Get form data and sanitize inputs.
+		// Sanitize and validate input.
 		$product_ids       = isset( $_POST['product_id'] ) ? array_map( 'absint', (array) wp_unslash( $_POST['product_id'] ) ) : array();
-		$number_of_coupons = isset( $_POST['number_of_coupons'] ) ? absint( wp_unslash( $_POST['number_of_coupons'] ) ) : 0;
+		$number_of_coupons = isset( $_POST['number_of_coupons'] ) ? absint( $_POST['number_of_coupons'] ) : 0;
 		$coupon_prefix     = isset( $_POST['coupon_prefix'] ) ? sanitize_text_field( wp_unslash( $_POST['coupon_prefix'] ) ) : '';
 		$discount_type     = isset( $_POST['discount_type'] ) ? sanitize_text_field( wp_unslash( $_POST['discount_type'] ) ) : 'free_gift';
 
@@ -201,6 +191,7 @@ class WooCommerceFreeGiftBulkCoupons {
 
 		// Validate inputs.
 		if ( empty( $product_ids ) || empty( $number_of_coupons ) ) {
+			delete_transient( $transient_key );
 			add_action(
 				'admin_notices',
 				function () {
@@ -215,6 +206,7 @@ class WooCommerceFreeGiftBulkCoupons {
 		// Additional validation for product IDs.
 		foreach ( $product_ids as $product_id ) {
 			if ( $product_id <= 0 || $product_id > PHP_INT_MAX ) {
+				delete_transient( $transient_key );
 				add_action(
 					'admin_notices',
 					function () {
@@ -228,6 +220,7 @@ class WooCommerceFreeGiftBulkCoupons {
 		}
 
 		if ( $number_of_coupons <= 0 || $number_of_coupons > 100 ) {
+			delete_transient( $transient_key );
 			add_action(
 				'admin_notices',
 				function () {
@@ -253,7 +246,7 @@ class WooCommerceFreeGiftBulkCoupons {
 						sprintf(
 							/* translators: %d: Number of coupons generated */
 							esc_html__( 'Successfully generated %d coupons.', 'wc-free-gift-coupons-bulk-coupons-generator' ),
-							esc_html( (string) $generated_coupons )
+							(int) $generated_coupons
 						) .
 						 '</p></div>';
 				}
@@ -525,7 +518,8 @@ class WooCommerceFreeGiftBulkCoupons {
 	 * @return string Generated coupon code.
 	 */
 	private function generate_coupon_code( $prefix = '' ) {
-		$code_length   = 12;
+		$code_length   = apply_filters( 'scg_coupon_code_length', 12 );
+		$code_length   = max( 8, min( 32, (int) $code_length ) ); // Enforce sane bounds.
 		$characters    = 'abcdefghijklmnopqrstuvwxyz0123456789';
 		$random_string = '';
 		$char_count    = strlen( $characters );
@@ -570,7 +564,8 @@ class WooCommerceFreeGiftBulkCoupons {
 			foreach ( $products as $product ) {
 				$product_obj = wc_get_product( $product->ID );
 				if ( $product_obj && $product_obj->is_purchasable() && $product_obj->is_visible() ) {
-					$product_options[ $product->ID ] = esc_html( $product_obj->get_name() ) . ' (ID: ' . esc_html( (string) $product->ID ) . ')';
+					// Store raw text — escaping is handled at render time in render_product_selection_field().
+					$product_options[ $product->ID ] = $product_obj->get_name() . ' (ID: ' . $product->ID . ')';
 				}
 			}
 

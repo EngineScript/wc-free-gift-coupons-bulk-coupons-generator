@@ -4,7 +4,7 @@
 
 msgid ""
 msgstr ""
-"Project-Id-Version: WC Free Gift Coupons Bulk Coupon Generator 1.5.0\n"
+"Project-Id-Version: WC Free Gift Coupons Bulk Coupon Generator 1.5.1\n"
 "Report-Msgid-Bugs-To: https://github.com/EngineScript/wc-free-gift-coupons-bulk-coupons-generator\n"
 "POT-Creation-Date: 2025-06-25 12:00:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
