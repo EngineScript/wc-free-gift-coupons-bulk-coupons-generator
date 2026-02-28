@@ -117,8 +117,11 @@ class WooCommerceFreeGiftBulkCoupons {
 	 * Initialize admin functionality
 	 */
 	public function admin_init() {
-		// Handle form submission — nonce verified inside handle_coupon_generation().
+		// Handle form submission with nonce verification.
 		if ( isset( $_POST['scg_generate_coupons'] ) ) {
+			if ( ! isset( $_POST['scg_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['scg_nonce'] ) ), 'scg_generate_coupons_action' ) ) {
+				return;
+			}
 			$this->handle_coupon_generation();
 		}
 	}
@@ -243,10 +246,12 @@ class WooCommerceFreeGiftBulkCoupons {
 				'admin_notices',
 				function () use ( $generated_coupons ) {
 					echo '<div class="notice notice-success is-dismissible"><p>' .
-						sprintf(
-							/* translators: %d: Number of coupons generated */
-							esc_html__( 'Successfully generated %d coupons.', 'wc-free-gift-coupons-bulk-coupons-generator' ),
-							(int) $generated_coupons
+						esc_html(
+							sprintf(
+								/* translators: %d: Number of coupons generated */
+								__( 'Successfully generated %d coupons.', 'wc-free-gift-coupons-bulk-coupons-generator' ),
+								(int) $generated_coupons
+							)
 						) .
 						 '</p></div>';
 				}

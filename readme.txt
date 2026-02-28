@@ -108,6 +108,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 == Changelog ==
 
+= Unreleased =
+* **CSRF Fix**: Restored nonce verification in `admin_init()` before processing form data.
+* **XSS Fix**: Properly escaped `sprintf()` output in success notice.
+
 = 1.5.1 =
 * **Double-Escaping Fix**: Fixed product names being double-escaped in the dropdown and success notices.
 * **Rate Limiting Fix**: Validation errors no longer lock users out for 5 minutes.

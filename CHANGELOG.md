@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **CSRF in admin_init**: Restored nonce verification in `admin_init()` before processing form data to prevent CSRF. The v1.5.1 removal was incorrect — without it, `$_POST` is accessed before any security check.
+- **XSS in Success Notice**: Wrapped `sprintf()` output in `esc_html()` (using `__()` instead of `esc_html__()` for the format string) to properly escape the final rendered output.
+
 ## [1.5.1] - 2026-02-23
 ### Fixed
 - **Double-Escaping in Product Dropdown**: Removed premature `esc_html()` calls in `get_products_for_dropdown()` that caused double-escaping when rendered. Escaping now occurs only at render time in `render_product_selection_field()`.
