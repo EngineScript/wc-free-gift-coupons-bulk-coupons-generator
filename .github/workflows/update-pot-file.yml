@@ -7,10 +7,6 @@ on:
       - '**.php'
       - '**.js'
       - '.github/workflows/update-pot-file.yml'
-    paths-ignore:
-      - 'README.md'
-      - 'CHANGELOG.md'
-      - 'GEMINI.md'
   workflow_dispatch:
 
 permissions:

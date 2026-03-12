@@ -13,8 +13,14 @@ parameters:
     
     bootstrapFiles:
         - vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
+
+    dynamicConstantNames:
+        - FGCBG_PLUGIN_URL
+        - FGCBG_PLUGIN_VERSION
     
     treatPhpDocTypesAsCertain: false
+
+    reportUnmatchedIgnoredErrors: false
     
     ignoreErrors:
         # Ignore WordPress global variables that might not be defined in test context
