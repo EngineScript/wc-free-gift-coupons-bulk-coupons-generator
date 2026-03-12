@@ -1,5 +1,5 @@
 /**
- * WooCommerce Free Gift Bulk Coupons Generator Admin JavaScript
+ * Free Gift Coupons Bulk Generator Admin JavaScript
  * ES5-compatible code for maximum browser compatibility
  * 
  * CODACY FALSE POSITIVES ADDRESSED:
@@ -17,7 +17,7 @@ if (typeof window !== 'undefined' && typeof window.jQuery !== 'undefined') {
         /**
          * Main admin object for handling the coupon generator interface
          */
-        var SCG_Admin = {
+        var FGCBG_Admin = {
         
         /**
          * Utility function to clean and validate alphanumeric input
@@ -76,7 +76,7 @@ if (typeof window !== 'undefined' && typeof window.jQuery !== 'undefined') {
             var $submitBtn = $form.find('.button-primary');
             
             // Validate form before submission
-            if (!SCG_Admin.validateForm()) {
+            if (!FGCBG_Admin.validateForm()) {
                 e.preventDefault();
                 return false;
             }
@@ -110,7 +110,7 @@ if (typeof window !== 'undefined' && typeof window.jQuery !== 'undefined') {
          */
         formatPrefix: function() {
             var value = $(this).val();
-            var cleanValue = SCG_Admin.cleanAlphanumeric(value, 10);
+            var cleanValue = FGCBG_Admin.cleanAlphanumeric(value, 10);
             $(this).val(cleanValue);
         },
         
@@ -283,7 +283,7 @@ if (typeof window !== 'undefined' && typeof window.jQuery !== 'undefined') {
                 var value = $this.val();
                 
                 // CODACY ADDRESSED: Using centralized utility to eliminate duplication
-                var cleanValue = SCG_Admin.cleanAlphanumeric(value, 10);
+                var cleanValue = FGCBG_Admin.cleanAlphanumeric(value, 10);
                 $this.val(cleanValue);
             });
         },
@@ -354,7 +354,7 @@ if (typeof window !== 'undefined' && typeof window.jQuery !== 'undefined') {
     
     // Initialize admin functionality
     // CODACY FALSE POSITIVE: All browser API calls are properly guarded above
-    SCG_Admin.init();
+    FGCBG_Admin.init();
     
     // Handle page unload during form submission
     // CODACY FALSE POSITIVE: Window API usage is safe within browser environment check

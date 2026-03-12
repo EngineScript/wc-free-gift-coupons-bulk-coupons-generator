@@ -1,4 +1,4 @@
-# WC Free Gift Coupons Bulk Coupon Generator - WordPress Plugin
+# Free Gift Coupons Bulk Coupon Generator - WordPress Plugin
 
 ## Project Overview
 
@@ -6,13 +6,13 @@ This is a WordPress plugin that generates bulk free gift coupon codes for WooCom
 
 ## Plugin Details
 
-- **Name:** WC Free Gift Coupons Bulk Coupon Generator
+- **Name:** Free Gift Coupons Bulk Coupon Generator
 - **Version:** 1.5.1
 - **WordPress Compatibility:** 6.5+
 - **PHP Compatibility:** 7.4+
 - **WooCommerce Compatibility:** 5.0+
 - **License:** GPL-3.0-or-later
-- **Text Domain:** wc-free-gift-coupons-bulk-coupons-generator
+- **Text Domain:** free-gift-coupons-bulk-coupons-generator
 - **Dependencies:** WooCommerce, Free Gift Coupons for WooCommerce
 
 ## Architecture & Design Patterns
@@ -22,7 +22,7 @@ This is a WordPress plugin that generates bulk free gift coupon codes for WooCom
 The plugin follows a singleton pattern with proper WordPress initialization:
 
 ```php
-class WooCommerceFreeGiftBulkCoupons {
+class FreeGiftCouponsBulkGenerator {
     private static $instance = null;
     
     public static function get_instance() {
@@ -39,10 +39,10 @@ class WooCommerceFreeGiftBulkCoupons {
 The plugin uses proper WordPress initialization patterns with dependency checking:
 
 ```php
-function wc_free_gift_bulk_coupons_init() {
-    WooCommerceFreeGiftBulkCoupons::get_instance();
+function free_gift_coupons_bulk_coupons_init() {
+    FreeGiftCouponsBulkGenerator::get_instance();
 }
-add_action( 'plugins_loaded', 'wc_free_gift_bulk_coupons_init' );
+add_action( 'plugins_loaded', 'free_gift_coupons_bulk_coupons_init' );
 ```
 
 ### File Structure
@@ -60,11 +60,12 @@ add_action( 'plugins_loaded', 'wc_free_gift_bulk_coupons_init' );
 
 ### Naming Conventions
 
-- **Class:** `WooCommerceFreeGiftBulkCoupons` (PascalCase)
+- **Class:** `FreeGiftCouponsBulkGenerator` (PascalCase)
 - **Methods:** `snake_case` (WordPress standard)
 - **Variables:** `$snake_case`
-- **Constants:** `SCG_UPPER_SNAKE_CASE`
-- **Text Domain:** Always use `'wc-free-gift-coupons-bulk-coupons-generator'`
+- **Constants:** `FGCBG_UPPER_SNAKE_CASE`
+- **Hooks/Filters:** `fgcbg_*` prefix
+- **Text Domain:** Always use `'free-gift-coupons-bulk-coupons-generator'`
 
 ### Security Requirements
 

@@ -89,7 +89,7 @@
         <properties>
             <!-- Set the text domain for internationalization -->
             <property name="text_domain" type="array">
-                <element value="wc-free-gift-coupons-bulk-coupons-generator"/>
+                <element value="free-gift-coupons-bulk-coupons-generator"/>
             </property>
         </properties>
     </rule>

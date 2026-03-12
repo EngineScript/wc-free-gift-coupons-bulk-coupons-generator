@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Plugin Rename**: Renamed plugin from "WC Free Gift Coupons Bulk Coupon Generator" to "Free Gift Coupons Bulk Coupon Generator" to remove WC prefix while maintaining clarity as a companion to the Free Gift Coupons for WooCommerce plugin.
+  - Updated text domain from `wc-free-gift-coupons-bulk-coupons-generator` to `free-gift-coupons-bulk-coupons-generator`
+  - Renamed main class from `WooCommerceFreeGiftBulkCoupons` to `FreeGiftCouponsBulkGenerator`
+  - Updated all plugin constants: `SCG_*` → `FGCBG_*` (Free Gift Coupons Bulk Generator)
+  - Updated all function names and hooks to use `fgcbg_` prefix instead of `scg_`
+  - Updated all coupon metadata keys from `_scg_*` to `_fgcbg_*`
+  - Updated helper functions and initialization callbacks
+  - Updated PHPCS and composer configuration
+  
+  **Migration Notes**: External code depending on the old hooks, filters, constants, or function names will need updating. This is considered a major version change due to the breaking API changes.
+
 ### Fixed
 - **CSRF in admin_init**: Restored nonce verification in `admin_init()` before processing form data to prevent CSRF. The v1.5.1 removal was incorrect — without it, `$_POST` is accessed before any security check.
 - **XSS in Success Notice**: Wrapped `sprintf()` output in `esc_html()` (using `__()` instead of `esc_html__()` for the format string) to properly escape the final rendered output.

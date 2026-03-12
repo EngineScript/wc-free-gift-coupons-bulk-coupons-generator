@@ -1,10 +1,10 @@
-# WC Free Gift Coupons Bulk Coupon Generator
+# Free Gift Coupons Bulk Coupon Generator
 # Copyright (C) 2025 EngineScript
 # This file is distributed under the GPL v3 or later.
 
 msgid ""
 msgstr ""
-"Project-Id-Version: WC Free Gift Coupons Bulk Coupon Generator 1.5.1\n"
+"Project-Id-Version: Free Gift Coupons Bulk Coupon Generator 1.5.1\n"
 "Report-Msgid-Bugs-To: https://github.com/EngineScript/wc-free-gift-coupons-bulk-coupons-generator\n"
 "POT-Creation-Date: 2025-06-25 12:00:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -15,9 +15,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: WP-CLI 2.4.0\n"
-"X-Domain: wc-free-gift-coupons-bulk-coupons-generator\n"
+"X-Domain: free-gift-coupons-bulk-coupons-generator\n"
 
-msgid "WC Free Gift Coupons Bulk Coupon Generator requires WooCommerce to be installed and active. You can download %s here."
+msgid "Free Gift Coupons Bulk Coupon Generator requires WooCommerce to be installed and active. You can download %s here."
 msgstr ""
 
 msgid "Free Gift Bulk Coupons"
@@ -53,10 +53,10 @@ msgstr ""
 msgid "Auto-generated coupon for %1$s (Batch %2$d/%3$d)"
 msgstr ""
 
-msgid "SCG Error generating coupon: %s"
+msgid "FGCBG Error generating coupon: %s"
 msgstr ""
 
-msgid "WC Free Gift Coupons Bulk Coupon Generator"
+msgid "Free Gift Coupons Bulk Coupon Generator"
 msgstr ""
 
 msgid "Generate bulk free gift coupons that work with the Free Gift Coupons for WooCommerce plugin. These coupons are created with the proper data structure required for free gift functionality."

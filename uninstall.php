@@ -1,11 +1,11 @@
 <?php
 /**
- * Uninstall script for WC Free Gift Coupons Bulk Coupon Generator
+ * Uninstall script for Free Gift Coupons Bulk Coupon Generator
  *
  * This script runs when the plugin is deleted via WordPress admin.
  * It cleans up any data created by the plugin.
  *
- * @package wc-free-gift-coupons-bulk-coupons-generator
+ * @package free-gift-coupons-bulk-coupons-generator
  */
 
 // Prevent direct access.
@@ -15,8 +15,8 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 // Clean up any plugin options/settings if we had any.
 // (Currently this plugin doesn't store any options, but this is here for future use).
-delete_option( 'scg_plugin_version' );
-delete_option( 'scg_settings' );
+delete_option( 'fgcbg_plugin_version' );
+delete_option( 'fgcbg_settings' );
 
 /**
  * Deletes all transients with a specific prefix.
@@ -25,7 +25,7 @@ delete_option( 'scg_settings' );
  *
  * @param string $prefix The prefix to search for.
  */
-function wc_fgbcg_delete_transients_with_prefix( $prefix ) {
+function fgcbg_delete_transients_with_prefix( $prefix ) {
 	global $wpdb;
 
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
@@ -44,7 +44,7 @@ function wc_fgbcg_delete_transients_with_prefix( $prefix ) {
 }
 
 // Clean up any transients.
-wc_fgbcg_delete_transients_with_prefix( 'scg_products_dropdown_' );
+fgcbg_delete_transients_with_prefix( 'fgcbg_products_dropdown_' );
 
 // Note: We don't delete the generated coupons as they may still be in use.
 // Users should manually delete coupons if they want to remove them completely.

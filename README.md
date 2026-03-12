@@ -1,4 +1,4 @@
-# WC Free Gift Coupons Bulk Coupon Generator
+# Free Gift Coupons Bulk Coupon Generator
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/0d4ba2d43e6e4ee1b2171879388e8cbe)](https://app.codacy.com/gh/EngineScript/wc-free-gift-coupons-bulk-coupons-generator/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![License](https://img.shields.io/badge/License-GPL%20v3-green.svg?logo=gnu)](https://www.gnu.org/licenses/gpl-3.0.html)

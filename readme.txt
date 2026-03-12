@@ -1,4 +1,4 @@
-=== WC Free Gift Coupons Bulk Coupon Generator ===
+=== Free Gift Coupons Bulk Coupon Generator ===
 Contributors: enginescript
 Tags: woocommerce, coupons, bulk, free-gifts, gift-coupons
 Requires at least: 6.5
@@ -12,7 +12,7 @@ Bulk generate free gift coupons that work with Free Gift Coupons for WooCommerce
 
 == Description ==
 
-WC Free Gift Coupons Bulk Coupon Generator is a specialized WordPress plugin designed to work specifically with the **Free Gift Coupons for WooCommerce** plugin. It generates bulk free gift coupons with the correct data structure that other coupon generators cannot provide.
+Free Gift Coupons Bulk Coupon Generator is a specialized WordPress plugin designed to work specifically with the **Free Gift Coupons for WooCommerce** plugin. It generates bulk free gift coupons with the correct data structure that other coupon generators cannot provide.
 
 **IMPORTANT**: This plugin requires the Free Gift Coupons for WooCommerce plugin to function properly. The Free Gift Coupons plugin can be purchased at https://woocommerce.com/products/free-gift-coupons/
 
