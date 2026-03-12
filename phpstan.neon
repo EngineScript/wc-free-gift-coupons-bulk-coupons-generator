@@ -28,14 +28,21 @@ parameters:
         - '#Variable \$wp_query might not be defined#'
         - '#Variable \$post might not be defined#'
         
+        # Ignore plugin constants defined conditionally in the main plugin file
+        - '#Constant FGCBG_PLUGIN_URL not found#'
+        - '#Constant FGCBG_PLUGIN_VERSION not found#'
+        - '#Constant FGCBG_PLUGIN_PATH not found#'
+        
         # Ignore WooCommerce functions and classes when WooCommerce is not loaded
         - '#Function wc_get_product not found#'
         - '#Function wc_get_coupon_id_by_code not found#'
         - '#Function wc_get_logger not found#'
+        - '#Function wp_sprintf not found#'
         - '#Instantiated class WC_Coupon not found#'
         - '#Call to method .* on an unknown class WC_Coupon#'
-        - '#Method .* of an unknown class WC_Coupon#'
-        - '#Parameter .* of method .* expects WC_Product#'
-        - '#Parameter .* of method .* has invalid type WC_Coupon#'
+        - '#Call to method .* on an unknown class WC_Product#'
+        - '#Method .* has invalid return type WC_Product#'
+        - '#has invalid type WC_Product#'
+        - '#has invalid type WC_Coupon#'
         - '#Class WC_Coupon not found#'
-        - '#Parameter \$coupon of method .* has invalid type WC_Coupon#'
+        - '#Class WC_Product not found#'
