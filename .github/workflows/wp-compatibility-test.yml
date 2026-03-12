@@ -803,7 +803,7 @@ jobs:
               }
               
               public function test_plugin_class_exists() {
-                  $this->assertTrue(class_exists('FreeGiftCouponsBulkGenerator'), 'Main plugin class should exist');
+                  $this->assertTrue(class_exists('FGCBG_Plugin'), 'Main plugin class should exist');
               }
               
               public function test_wordpress_version_compatibility() {
@@ -831,11 +831,11 @@ jobs:
               }
               
               public function test_plugin_instance() {
-                  $instance = FreeGiftCouponsBulkGenerator::get_instance();
-                  $this->assertInstanceOf('FreeGiftCouponsBulkGenerator', $instance, 'Plugin should return valid instance');
+                  $instance = FGCBG_Plugin::get_instance();
+                  $this->assertInstanceOf('FGCBG_Plugin', $instance, 'Plugin should return valid instance');
                   
                   // Test singleton pattern
-                  $instance2 = FreeGiftCouponsBulkGenerator::get_instance();
+                  $instance2 = FGCBG_Plugin::get_instance();
                   $this->assertSame($instance, $instance2, 'Plugin should use singleton pattern');
               }
           }
