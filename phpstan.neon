@@ -5,6 +5,7 @@ parameters:
     level: 6
     paths:
         - free-gift-bulk-coupon-generator.php
+        - includes/
 
     excludePaths:
         - .github
