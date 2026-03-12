@@ -1,12 +1,13 @@
 # Free Gift Coupons Bulk Coupon Generator
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/0d4ba2d43e6e4ee1b2171879388e8cbe)](https://app.codacy.com/gh/EngineScript/wc-free-gift-coupons-bulk-coupons-generator/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/0d4ba2d43e6e4ee1b2171879388e8cbe)](https://app.codacy.com/gh/EngineScript/free-gift-coupons-bulk-coupons-generator/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![License](https://img.shields.io/badge/License-GPL%20v3-green.svg?logo=gnu)](https://www.gnu.org/licenses/gpl-3.0.html)
 [![WordPress Compatible](https://img.shields.io/badge/WordPress-6.5%2B-blue.svg?logo=wordpress)](https://wordpress.org/)
 [![PHP Compatible](https://img.shields.io/badge/PHP-7.4%2B-purple.svg?logo=php)](https://www.php.net/)
 
 ## Current Version
-[![Version](https://img.shields.io/badge/Version-1.5.1-orange.svg?logo=github)](https://github.com/EngineScript/wc-free-gift-coupons-bulk-coupons-generator/releases/latest/download/free-gift-bulk-coupon-generator-1.5.1.zip)
+
+[![Version](https://img.shields.io/badge/Version-1.5.1-orange.svg?logo=github)](https://github.com/EngineScript/free-gift-coupons-bulk-coupons-generator/releases/latest/download/free-gift-bulk-coupon-generator-1.5.1.zip)
 
 A WordPress plugin for generating bulk free gift coupons that work specifically with the **Free Gift Coupons for WooCommerce** plugin. Creates coupons with the proper data structure required for free gift functionality.
 
@@ -16,6 +17,8 @@ A WordPress plugin for generating bulk free gift coupons that work specifically 
 
 - **Free Gift Compatibility**: Specifically designed to work with Free Gift Coupons for WooCommerce plugin
 - **Easy-to-use Admin Interface**: Generate free gift coupons through a user-friendly WordPress admin panel
+- **AJAX Product Search**: WooCommerce Select2-powered product search — scales to any catalog size
+- **AJAX Batch Generation**: Real-time progress bar, no timeout risk, generates coupons in batches of 10
 - **Multi-Product Support**: Select single or multiple products as free gifts
 - **Custom Prefixes**: Add custom prefixes to your coupon codes (e.g., GIFT-ABC123)
 - **Bulk Generation**: Generate up to 100 coupons at once (security-optimized limit)
@@ -44,10 +47,10 @@ A WordPress plugin for generating bulk free gift coupons that work specifically 
 ## Usage
 
 1. Go to **WooCommerce > Free Gift Bulk Coupons** in your WordPress admin
-2. Select one or more products you want to give as free gifts
+2. Search and select one or more products you want to give as free gifts
 3. Enter the number of coupons to generate (1-100)
 4. Optionally add a custom prefix for the coupon codes
-5. Click "Generate Free Gift Coupons"
+5. Click "Generate Free Gift Coupons" and watch the progress bar
 
 ## Generated Coupon Features
 
@@ -68,17 +71,22 @@ A WordPress plugin for generating bulk free gift coupons that work specifically 
 ## Developer Information
 
 ### File Structure
-```
+
+```text
 free-gift-bulk-coupon-generator/
-├── free-gift-bulk-coupon-generator.php    # Main plugin file
+├── free-gift-bulk-coupon-generator.php    # Plugin entry point
+├── includes/
+│   ├── class-fgcbg-plugin.php             # Main plugin class (singleton, hooks, AJAX)
+│   ├── class-fgcbg-coupon-generator.php   # Coupon generation logic
+│   └── class-fgcbg-admin-page.php         # Admin page rendering
 ├── assets/
 │   ├── css/
 │   │   └── admin.css              # Admin interface styles
 │   └── js/
 │       └── admin.js               # Admin interface JavaScript
 ├── languages/
-│   └── free-gift-bulk-coupon-generator.pot # Translation template
-└── README.md                      # This file
+│   └── Free-Gift-Coupons-Bulk-Coupons-Generator.pot
+└── README.md
 ```
 
 ### Hooks and Filters
@@ -86,27 +94,42 @@ free-gift-bulk-coupon-generator/
 The plugin provides several hooks for developers:
 
 #### Actions
-- `scg_before_coupon_generation` - Fired before coupon generation starts
-- `scg_after_coupon_generation` - Fired after coupon generation completes
-- `scg_coupon_generated` - Fired after each individual coupon is created
+
+- `fgcbg_before_coupon_generation` - Fired before coupon generation starts
+- `fgcbg_after_coupon_generation` - Fired after coupon generation completes
+- `fgcbg_coupon_generated` - Fired after each individual coupon is created
 
 #### Filters
-- `scg_coupon_code_length` - Filter the length of generated coupon codes
-- `scg_coupon_expiry_days` - Filter the number of days until coupon expiry
-- `scg_max_coupons_per_batch` - Filter the maximum number of coupons per batch
+
+- `fgcbg_coupon_code_length` - Filter the length of generated coupon codes (default: 12, bounds: 8–32)
+- `fgcbg_coupon_expiry_days` - Filter the number of days until coupon expiry (default: 365)
+- `fgcbg_max_coupons_per_batch` - Filter the maximum number of coupons per batch (default: 100)
 
 ### Code Example
 
 ```php
-// Customize coupon expiry to 30 days
-add_filter('scg_coupon_expiry_days', function($days) {
+/**
+ * Customize coupon expiry to 30 days.
+ *
+ * @param int $days Default expiry days.
+ * @return int
+ */
+function my_custom_coupon_expiry( $days ) {
     return 30;
-});
+}
+add_filter( 'fgcbg_coupon_expiry_days', 'my_custom_coupon_expiry' );
 
-// Log when coupons are generated
-add_action('scg_after_coupon_generation', function($product_id, $count) {
-    error_log("Generated {$count} coupons for product {$product_id}");
-}, 10, 2);
+/**
+ * Log when coupons are generated.
+ *
+ * @param array $product_ids Product IDs.
+ * @param int   $count       Number generated.
+ * @return void
+ */
+function my_log_coupon_generation( $product_ids, $count ) {
+    wc_get_logger()->info( "Generated {$count} coupons.", array( 'source' => 'my-plugin' ) );
+}
+add_action( 'fgcbg_after_coupon_generation', 'my_log_coupon_generation', 10, 2 );
 ```
 
 ## Changelog
@@ -115,7 +138,7 @@ For a detailed list of changes, please see the [CHANGELOG.md](CHANGELOG.md) file
 
 ## Support
 
-For support, feature requests, or bug reports, please visit the [GitHub repository](https://github.com/EngineScript/wc-free-gift-coupons-bulk-coupons-generator).
+For support, feature requests, or bug reports, please visit the [GitHub repository](https://github.com/EngineScript/free-gift-coupons-bulk-coupons-generator).
 
 ---
 

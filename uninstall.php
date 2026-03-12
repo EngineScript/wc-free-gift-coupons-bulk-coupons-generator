@@ -23,7 +23,9 @@ delete_option( 'fgcbg_settings' );
  *
  * Namespaced to avoid collisions — only runs during uninstall.
  *
+ * @since 1.5.0
  * @param string $prefix The prefix to search for.
+ * @return void
  */
 function fgcbg_delete_transients_with_prefix( $prefix ) {
 	global $wpdb;
@@ -44,7 +46,7 @@ function fgcbg_delete_transients_with_prefix( $prefix ) {
 }
 
 // Clean up any transients.
-fgcbg_delete_transients_with_prefix( 'fgcbg_products_dropdown_' );
+fgcbg_delete_transients_with_prefix( 'fgcbg_generating_' );
 
 // Note: We don't delete the generated coupons as they may still be in use.
 // Users should manually delete coupons if they want to remove them completely.

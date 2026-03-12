@@ -20,7 +20,9 @@ The plugin creates coupons with the proper `gift_info` array structure required 
 
 Key features:
 * **Free Gift Compatibility**: Specifically designed for Free Gift Coupons for WooCommerce plugin
-* **Bulk Generation**: Create up to 100 free gift coupons at once with built-in rate limiting
+* **Bulk Generation**: Create up to 100 free gift coupons at once with AJAX batch processing
+* **AJAX Product Search**: WooCommerce Select2-powered search — scales to any catalog size
+* **Progress Bar**: Real-time progress feedback during generation, no timeout risk
 * **Multi-Product Support**: Select multiple products as free gifts in a single coupon
 * **Proper Data Structure**: Creates gift_info arrays with correct product ID mapping
 * **Custom Prefixes**: Add custom prefixes to coupon codes for easy organization
@@ -109,14 +111,46 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 == Changelog ==
 
 = Unreleased =
-* **CSRF Fix**: Restored nonce verification in `admin_init()` before processing form data.
-* **XSS Fix**: Properly escaped `sprintf()` output in success notice.
+
+**Added:**
+
+* AJAX batch coupon generation with real-time progress bar — eliminates timeout risks.
+* WooCommerce Select2 AJAX product search — scales to unlimited catalog sizes.
+* CSS custom properties for all colors.
+* `aria-describedby` attributes on all form fields for accessibility.
+* i18n-safe list formatting with `wp_sprintf()`.
+* All JavaScript strings internationalized via `wp_localize_script()`.
+* Named class constants for all magic numbers.
+
+**Changed:**
+
+* Renamed plugin from "WC Free Gift Coupons Bulk Coupon Generator" to "Free Gift Coupons Bulk Coupon Generator". Updated all prefixes from `scg_`/`SCG_` to `fgcbg_`/`FGCBG_`. **Breaking change** for external code using old hooks/filters/constants.
+* Split single-file architecture into `includes/class-fgcbg-plugin.php`, `includes/class-fgcbg-coupon-generator.php`, `includes/class-fgcbg-admin-page.php`.
+* Modernized JavaScript to ESNext (`const`/`let`, arrow functions, template literals, optional chaining, nullish coalescing).
+* Replaced anonymous hook closures with named methods (unhookable by other plugins).
+* Rewrote CSS with tab indentation, alphabetical property ordering per WordPress Coding Standards.
+* Complete PHPDoc with `@since`, `@param`, `@return` on all classes, properties, constants, and methods.
+
+**Fixed:**
+
+* CSRF vulnerability in `admin_init()` — now replaced by AJAX `check_ajax_referer()`.
+* XSS in success notice — properly escaped `sprintf()` output.
+* Parse error from missing `catch` block in `create_single_coupon()`.
+* Error logging now uses `$exception->getMessage()` instead of useless `$exception->getCode()`.
+* Removed all inline styles from PHP and JavaScript.
+* Updated `composer.json` wordpress-stubs from `^6.8` to `^6.9`.
+
+**Removed:**
+
+* Static product dropdown cache (`get_products_for_dropdown()`, `invalidate_product_cache()`). Replaced by WooCommerce AJAX search.
+* Synchronous form POST (`admin_init()`, `handle_coupon_generation()`). All generation via AJAX.
+* Product cache transient cleanup from `uninstall.php`.
 
 = 1.5.1 =
 * **Double-Escaping Fix**: Fixed product names being double-escaped in the dropdown and success notices.
 * **Rate Limiting Fix**: Validation errors no longer lock users out for 5 minutes.
 * **Naming Collision Protection**: Added constant definition guards and renamed uninstall helper function.
-* **Implemented Filter**: The `scg_coupon_code_length` filter now works as documented.
+* **Implemented Filter**: The `fgcbg_coupon_code_length` filter now works as documented.
 * **Code Cleanup**: Removed dead AJAX localization code, misplaced security headers, and redundant nonce check.
 * **Version Sync**: Synchronized version numbers across all project files.
 * **FAQ Fix**: Corrected inaccurate reference to `wp_generate_password()` in FAQ.
