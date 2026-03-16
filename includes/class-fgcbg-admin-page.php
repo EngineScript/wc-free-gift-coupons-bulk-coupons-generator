@@ -227,5 +227,4 @@ class FGCBG_Admin_Page {
 		</div>
 		<?php
 	}
-
 }

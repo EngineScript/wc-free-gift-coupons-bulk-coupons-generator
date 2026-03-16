@@ -209,5 +209,4 @@ class FGCBG_Plugin {
 			)
 		);
 	}
-
 }
