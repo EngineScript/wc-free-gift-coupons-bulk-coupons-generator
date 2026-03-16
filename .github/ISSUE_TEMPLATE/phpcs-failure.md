@@ -46,7 +46,8 @@ This issue has been automatically created because the WooCommerce Free Gift Bulk
 4. **Manual Fix**: Address security and logic issues manually
 5. **Validate**: Re-run PHPCS to confirm all issues are resolved
 
-#### Local Testing Commands:
+#### Local Testing Commands
+
 ```bash
 # Install dependencies
 composer install

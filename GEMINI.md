@@ -45,10 +45,10 @@ languages/
 ### Plugin Initialization
 
 ```php
-function free_gift_coupons_bulk_coupons_init() {
+function fgcbg_init() {
     FGCBG_Plugin::get_instance();
 }
-add_action( 'plugins_loaded', 'free_gift_coupons_bulk_coupons_init' );
+add_action( 'plugins_loaded', 'fgcbg_init' );
 ```
 
 ## WordPress Coding Standards

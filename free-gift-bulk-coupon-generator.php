@@ -42,7 +42,7 @@ require_once FGCBG_PLUGIN_PATH . 'includes/class-fgcbg-plugin.php';
  * @since 1.0.0
  * @return bool
  */
-function free_gift_coupons_bulk_coupons_is_loaded() {
+function fgcbg_is_loaded() {
 	return class_exists( 'FGCBG_Plugin' );
 }
 
@@ -52,8 +52,8 @@ function free_gift_coupons_bulk_coupons_is_loaded() {
  * @since 1.0.0
  * @return void
  */
-function free_gift_coupons_bulk_coupons_init() {
+function fgcbg_init() {
 	FGCBG_Plugin::get_instance();
 }
 
-add_action( 'plugins_loaded', 'free_gift_coupons_bulk_coupons_init' );
+add_action( 'plugins_loaded', 'fgcbg_init' );

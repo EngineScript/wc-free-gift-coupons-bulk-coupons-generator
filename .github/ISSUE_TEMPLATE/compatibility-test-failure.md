@@ -36,7 +36,8 @@ This issue has been automatically created because the WooCommerce Free Gift Bulk
 4. **Plugin Check**: Run WordPress Plugin Check locally against this environment
 5. **Update Code**: Make necessary updates to ensure compatibility across supported versions
 
-#### Testing Commands:
+#### Testing Commands
+
 ```bash
 # Test with specific versions using Docker
 docker run --rm -v $(pwd):/app wordpress:{{ env.WP_VERSION }}-php{{ env.PHP_VERSION }}-apache

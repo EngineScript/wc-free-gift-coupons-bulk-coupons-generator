@@ -798,8 +798,8 @@ jobs:
           class Test_Free_Gift_Bulk_Coupon_Generator extends WP_UnitTestCase {
               public function test_plugin_loaded() {
                   // Test the helper function exists and returns true
-                  $this->assertTrue(function_exists('free_gift_coupons_bulk_coupons_is_loaded'), 'Plugin helper function should exist');
-                  $this->assertTrue(free_gift_coupons_bulk_coupons_is_loaded(), 'Plugin class should be loaded');
+                  $this->assertTrue(function_exists('fgcbg_is_loaded'), 'Plugin helper function should exist');
+                  $this->assertTrue(fgcbg_is_loaded(), 'Plugin class should be loaded');
               }
               
               public function test_plugin_class_exists() {

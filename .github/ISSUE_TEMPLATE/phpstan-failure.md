@@ -13,9 +13,11 @@ assignees: []
 **Date:** {{ date | date('YYYY-MM-DD') }}
 
 ### Description
+
 The PHPStan for WordPress static analysis check has failed during the automated testing process.
 
 ### What happened?
+
 PHPStan for WordPress detected potential code issues during static analysis. This could indicate:
 
 - Type safety issues specific to WordPress APIs

@@ -58,7 +58,8 @@ This project uses a WordPress-specific PHPMD configuration (`phpmd.xml`) that su
 5. **Improve Naming**: Use consistent and descriptive naming
 6. **Validate**: Re-run PHPMD to confirm improvements
 
-#### Local Testing Commands:
+#### Local Testing Commands
+
 ```bash
 # Install dependencies
 composer install
@@ -76,7 +77,8 @@ composer install
 ./vendor/bin/phpmd free-gift-bulk-coupon-generator.php text codesize --minimumpriority 1
 ```
 
-#### Example Fixes:
+#### Example Fixes
+
 ```php
 // Before: High complexity
 function complex_function($a, $b, $c, $d, $e) {

@@ -13,9 +13,11 @@ assignees: []
 **Date:** {{ date | date('YYYY-MM-DD') }}
 
 ### Description
+
 The WordPress dependencies monitoring check has failed during the automated testing process.
 
 ### What happened?
+
 The WordPress dependencies monitoring action detected issues with dependencies. This could indicate:
 
 - Outdated WordPress core dependencies

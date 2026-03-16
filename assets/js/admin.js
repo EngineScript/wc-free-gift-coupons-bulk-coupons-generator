@@ -45,6 +45,20 @@
 	}
 
 	/**
+	 * Insert a notice element before the form and scroll it into view.
+	 *
+	 * @param {jQuery} $el - The notice element to insert.
+	 */
+	function insertNoticeBeforeForm( $el ) {
+		$el.insertBefore( $( '.scg-form' ) );
+
+		const offset = $el.offset();
+		if ( offset?.top ) {
+			$( 'html, body' ).animate( { scrollTop: Math.max( 0, offset.top - 50 ) }, 300 );
+		}
+	}
+
+	/**
 	 * Send a single batch AJAX request and return the jQuery promise.
 	 *
 	 * @param {number} batchSize - Number of coupons for this batch.
@@ -335,12 +349,7 @@
 
 			const $el = createElement( 'div', { class: 'notice notice-error scg-error-message' } );
 			$el.append( createElement( 'p' ).text( message ) );
-			$el.insertBefore( $( '.scg-form' ) );
-
-			const offset = $el.offset();
-			if ( offset?.top ) {
-				$( 'html, body' ).animate( { scrollTop: Math.max( 0, offset.top - 50 ) }, 300 );
-			}
+			insertNoticeBeforeForm( $el );
 
 			setTimeout( () => $el.fadeOut( 400, () => $el.remove() ), 5000 );
 		},
@@ -355,12 +364,7 @@
 
 			const $el = createElement( 'div', { class: 'notice notice-success is-dismissible' } );
 			$el.append( createElement( 'p' ).text( message ) );
-			$( '.scg-form' ).before( $el );
-
-			const offset = $el.offset();
-			if ( offset?.top ) {
-				$( 'html, body' ).animate( { scrollTop: Math.max( 0, offset.top - 50 ) }, 300 );
-			}
+			insertNoticeBeforeForm( $el );
 		},
 	};
 
