@@ -21,14 +21,16 @@ The automated PHP CodeSniffer (PHPCS) test has detected coding standard violatio
 
 This issue has been automatically created because the WooCommerce Free Gift Bulk Coupons Generator plugin failed to meet WordPress coding standards. PHPCS checks for:
 
-#### Checked Standards:
+#### Checked Standards
+
 1. **WordPress Core**: Core WordPress coding standards
 2. **WordPress Extra**: Extended WordPress coding standards
 3. **WordPress VIP**: WordPress VIP-specific standards
 4. **Security Standards**: Security-focused coding practices
 5. **PSR-12**: PHP-FIG PSR-12 basic coding standard
 
-#### Common Issues:
+#### Common Issues
+
 - Improper variable naming conventions
 - Missing or incorrect code documentation
 - Incorrect indentation or spacing
@@ -36,7 +38,7 @@ This issue has been automatically created because the WooCommerce Free Gift Bulk
 - Improper use of WordPress functions
 - File and class naming violations
 
-#### Recommended Actions:
+#### Recommended Actions
 
 1. **Review Logs**: Check the workflow logs for specific PHPCS violations
 2. **Local Testing**: Run PHPCS locally to see detailed error reports

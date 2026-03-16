@@ -21,6 +21,7 @@ The WordPress Plugin Check action has identified issues with the WooCommerce Fre
 This issue has been automatically created because the WordPress Plugin Check found issues with the plugin that should be addressed. The check performed the following specific tests:
 
 #### Categories:
+
 - **Accessibility**: Checks for accessibility compliance issues
 - **General**: General WordPress coding standards and best practices
 - **Performance**: Tests that identify performance bottlenecks
@@ -28,6 +29,7 @@ This issue has been automatically created because the WordPress Plugin Check fou
 - **Security**: Security-focused checks to identify vulnerabilities
 
 #### Specific Checks:
+
 - **i18n_usage**: Proper internationalization usage
 - **code_obfuscation**: Detecting potentially obfuscated code
 - **direct_db_queries**: Identifying direct database queries that bypass WordPress APIs

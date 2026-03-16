@@ -53,10 +53,10 @@ class FGCBG_Coupon_Generator {
 	 * Generate coupons.
 	 *
 	 * @since 1.0.0
-	 * @param array<int> $product_ids Array of product IDs to generate coupons for.
-	 * @param int $number_of_coupons Number of coupons to generate.
-	 * @param string $prefix Coupon prefix.
-	 * @param string $discount_type Type of discount.
+	 * @param array<int> $product_ids          Array of product IDs to generate coupons for.
+	 * @param int       $number_of_coupons    Number of coupons to generate.
+	 * @param string    $prefix               Coupon prefix.
+	 * @param string    $discount_type        Type of discount.
 	 * @return int Number of coupons generated.
 	 */
 	public function generate_coupons( $product_ids, $number_of_coupons, $prefix = '', $discount_type = 'free_gift' ) {
@@ -104,9 +104,9 @@ class FGCBG_Coupon_Generator {
 	 * Prepare generation parameters.
 	 *
 	 * @since 1.0.0
-	 * @param int $number_of_coupons Number of coupons to generate.
-	 * @param string $prefix Coupon prefix.
-	 * @param string $discount_type Type of discount.
+	 * @param int    $number_of_coupons Number of coupons to generate.
+	 * @param string $prefix            Coupon prefix.
+	 * @param string $discount_type     Type of discount.
 	 * @return array{count:int, prefix:string, discount_type:string, expiry_days:int, max_attempts:int} Generation parameters array.
 	 */
 	private function prepare_generation_params( $number_of_coupons, $prefix, $discount_type ) {
@@ -126,8 +126,8 @@ class FGCBG_Coupon_Generator {
 	 * Prepare gift information for coupons.
 	 *
 	 * @since 1.0.0
-	 * @param array<int,WC_Product> $valid_products Array of valid product objects.
-	 * @return array<int,array{product_id:int,variation_id:int,quantity:int}> Gift information array.
+	 * @param array<int, WC_Product> $valid_products Array of valid product objects.
+	 * @return array<int, array{product_id:int, variation_id:int, quantity:int}> Gift information array.
 	 */
 	private function prepare_gift_info( $valid_products ) {
 		$gift_info = array();
@@ -145,9 +145,9 @@ class FGCBG_Coupon_Generator {
 	 * Execute the coupon generation process.
 	 *
 	 * @since 1.0.0
-	 * @param array<int,WC_Product> $valid_products Array of valid product objects.
-	 * @param array<int,array{product_id:int,variation_id:int,quantity:int}> $gift_info Gift information array.
-	 * @param array{count:int,prefix:string,discount_type:string,expiry_days:int,max_attempts:int} $params Generation parameters.
+	 * @param array<int, WC_Product>                                          $valid_products Array of valid product objects.
+	 * @param array<int, array{product_id:int, variation_id:int, quantity:int}> $gift_info      Gift information array.
+	 * @param array{count:int, prefix:string, discount_type:string, expiry_days:int, max_attempts:int} $params         Generation parameters.
 	 * @return int Number of coupons generated.
 	 */
 	private function execute_coupon_generation( $valid_products, $gift_info, $params ) {
@@ -177,10 +177,10 @@ class FGCBG_Coupon_Generator {
 	 * Create a single coupon.
 	 *
 	 * @since 1.0.0
-	 * @param array<int,WC_Product> $valid_products Array of valid product objects.
-	 * @param array<int,array{product_id:int,variation_id:int,quantity:int}> $gift_info Gift information array.
-	 * @param array{count:int,prefix:string,discount_type:string,expiry_days:int,max_attempts:int} $params Generation parameters.
-	 * @param int $current_number Current coupon number in batch.
+	 * @param array<int, WC_Product>                                          $valid_products Array of valid product objects.
+	 * @param array<int, array{product_id:int, variation_id:int, quantity:int}> $gift_info      Gift information array.
+	 * @param array{count:int, prefix:string, discount_type:string, expiry_days:int, max_attempts:int} $params         Generation parameters.
+	 * @param int                                                               $current_number Current coupon number in batch.
 	 * @return bool True if coupon was created successfully, false otherwise.
 	 */
 	private function create_single_coupon( $valid_products, $gift_info, $params, $current_number ) {
@@ -206,11 +206,11 @@ class FGCBG_Coupon_Generator {
 	 * Set coupon properties.
 	 *
 	 * @since 1.0.0
-	 * @param WC_Coupon $coupon The coupon object.
-	 * @param string $code The coupon code.
-	 * @param array<int,WC_Product> $valid_products Array of valid product objects.
-	 * @param array{count:int,prefix:string,discount_type:string,expiry_days:int,max_attempts:int} $params Generation parameters.
-	 * @param int $current_number Current coupon number in batch.
+	 * @param WC_Coupon $coupon           The coupon object.
+	 * @param string    $code             The coupon code.
+	 * @param array<int, WC_Product> $valid_products Array of valid product objects.
+	 * @param array{count:int, prefix:string, discount_type:string, expiry_days:int, max_attempts:int} $params           Generation parameters.
+	 * @param int       $current_number   Current coupon number in batch.
 	 * @return void
 	 */
 	private function set_coupon_properties( $coupon, $code, $valid_products, $params, $current_number ) {
@@ -240,9 +240,9 @@ class FGCBG_Coupon_Generator {
 	 * Set coupon metadata.
 	 *
 	 * @since 1.0.0
-	 * @param WC_Coupon $coupon The coupon object.
-	 * @param array<int,array{product_id:int,variation_id:int,quantity:int}> $gift_info Gift information array.
-	 * @param array{count:int,prefix:string,discount_type:string,expiry_days:int,max_attempts:int} $params Generation parameters.
+	 * @param WC_Coupon $coupon      The coupon object.
+	 * @param array<int, array{product_id:int, variation_id:int, quantity:int}> $gift_info Gift information array.
+	 * @param array{count:int, prefix:string, discount_type:string, expiry_days:int, max_attempts:int} $params    Generation parameters.
 	 * @return void
 	 */
 	private function set_coupon_metadata( $coupon, $gift_info, $params ) {

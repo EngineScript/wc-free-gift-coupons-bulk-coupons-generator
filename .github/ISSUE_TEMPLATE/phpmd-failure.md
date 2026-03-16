@@ -21,7 +21,8 @@ The automated PHP Mess Detector (PHPMD) analysis has detected code quality issue
 
 This issue has been automatically created because the WooCommerce Free Gift Bulk Coupons Generator plugin failed PHPMD code quality analysis. PHPMD detects:
 
-#### Analyzed Areas:
+#### Analyzed Areas
+
 1. **Clean Code**: Code complexity and maintainability issues
 2. **Code Size**: Overly large classes, methods, or parameter lists
 3. **Design**: Poor object-oriented design patterns
@@ -29,13 +30,16 @@ This issue has been automatically created because the WooCommerce Free Gift Bulk
 5. **Unused Code**: Dead code that should be removed
 
 #### WordPress-Specific Configuration
+
 This project uses a WordPress-specific PHPMD configuration (`phpmd.xml`) that suppresses WordPress-standard patterns:
+
 - **Superglobals**: WordPress safely uses `$_GET`, `$_POST` with proper sanitization
 - **Exit Expressions**: Required for file downloads and security redirects
 - **Missing Imports**: WordPress core classes like `WP_Error` are auto-loaded
 - **Else Expressions**: Sometimes required for WordPress security patterns
 
-#### Common Issues:
+#### Common Issues
+
 - **Cyclomatic Complexity**: Methods with too many decision paths
 - **NPath Complexity**: Methods with too many execution paths
 - **Long Methods**: Methods that are too lengthy and should be split
@@ -45,7 +49,7 @@ This project uses a WordPress-specific PHPMD configuration (`phpmd.xml`) that su
 - **Superglobals**: Direct access to superglobal variables
 - **CamelCase Violations**: Inconsistent naming conventions
 
-#### Recommended Actions:
+#### Recommended Actions
 
 1. **Review Logs**: Check the workflow logs for specific PHPMD violations
 2. **Local Analysis**: Run PHPMD locally to get detailed reports

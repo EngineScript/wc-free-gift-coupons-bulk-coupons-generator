@@ -21,7 +21,9 @@
 	 * @returns {jQuery} The new element.
 	 */
 	function createElement( tag, attrs ) {
-		const el = $( document.createElement( tag ) );
+		// Create element using document.createElement (safe, no string parsing)
+		const domElement = document.createElement( tag );
+		const el = jQuery( domElement );
 		if ( attrs ) {
 			el.attr( attrs );
 		}
@@ -224,10 +226,10 @@
 			if ( num > 100 ) {
 				num = 100;
 				$input.val( num );
-				$input.after( buildWarningSpan( 'error', i18n.max_coupons_warning ?? '' ) );
+				buildWarningSpan( 'error', i18n.max_coupons_warning ?? '' ).insertAfter( $input );
 			} else if ( num > 50 ) {
 				$input.val( num );
-				$input.after( buildWarningSpan( 'caution', i18n.many_coupons_warning ?? '' ) );
+				buildWarningSpan( 'caution', i18n.many_coupons_warning ?? '' ).insertAfter( $input );
 			} else {
 				$input.val( num );
 			}
@@ -333,7 +335,7 @@
 
 			const $el = createElement( 'div', { class: 'notice notice-error scg-error-message' } );
 			$el.append( createElement( 'p' ).text( message ) );
-			$( '.scg-form' ).before( $el );
+			$el.insertBefore( $( '.scg-form' ) );
 
 			const offset = $el.offset();
 			if ( offset?.top ) {
