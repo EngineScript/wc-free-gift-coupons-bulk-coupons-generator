@@ -6,10 +6,10 @@ applyTo: '**'
 
 ## Compatibility
 
-- WordPress 6.5+, PHP 7.4+, WooCommerce 5.0+
+- WordPress 6.6+, PHP 7.4+, WooCommerce 5.0+
 - Follow [WordPress Coding Standards](https://developer.wordpress.org/coding-standards/) for PHP, JS, CSS, HTML, and accessibility
 - Never use deprecated WordPress or PHP functions — this is a modern plugin (2026)
-- Use ES6+ JavaScript (WordPress 6.5+ targets modern browsers)
+- Use ES6+ JavaScript (WordPress 6.6+ targets modern browsers)
 
 ## Environment
 

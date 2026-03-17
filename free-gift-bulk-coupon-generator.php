@@ -5,7 +5,7 @@
  * Description: Generate bulk free gift coupon codes that work with the Free Gift Coupons for WooCommerce plugin. Creates coupons with the proper data structure for free gift functionality.
  * Version: 1.5.1
  * Author: EngineScript
- * Requires at least: 6.5
+ * Requires at least: 6.6
  * Tested up to: 6.9
  * Requires PHP: 7.4
  * License: GPL-3.0-or-later

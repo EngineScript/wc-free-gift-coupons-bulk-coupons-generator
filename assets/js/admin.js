@@ -2,7 +2,7 @@
 /**
  * Free Gift Coupons Bulk Generator — Admin JavaScript.
  *
- * Modern ESNext code. WordPress 6.5+ targets browsers with full ES6+ support.
+ * Modern ESNext code. WordPress 6.6+ targets browsers with full ES6+ support.
  * All user-facing strings are sourced from `fgcbg_i18n` (wp_localize_script).
  */
 /* eslint-enable jsdoc/check-tag-names */

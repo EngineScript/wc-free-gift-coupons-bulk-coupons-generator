@@ -1,7 +1,7 @@
 === Free Gift Coupons Bulk Coupon Generator ===
 Contributors: enginescript
 Tags: woocommerce, coupons, bulk, free-gifts, gift-coupons
-Requires at least: 6.5
+Requires at least: 6.6
 Tested up to: 6.9
 Stable tag: 1.5.1
 Requires PHP: 7.4
@@ -53,7 +53,7 @@ This plugin is built with security as the top priority, implementing multiple la
 
 = What are the system requirements? =
 
-* WordPress 6.5 or higher
+* WordPress 6.6 or higher
 * WooCommerce plugin installed and activated
 * Free Gift Coupons for WooCommerce plugin (required - purchase at https://woocommerce.com/products/free-gift-coupons/)
 * PHP 7.4 or higher
